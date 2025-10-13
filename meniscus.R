@@ -1,3 +1,5 @@
+# You need the meniscusData.csv file.
+
 # Load required libraries
 library(ggplot2)
 library(readr)
@@ -6,7 +8,7 @@ library(tseries)
 library(urca)
 
 # --- Load and prepare data ---
-df <- read_csv("multiTimeline.csv")
+df <- read_csv("meniscusData.csv")
 df$month <- as.Date(paste0(df$month, "-01"))
 
 # Define cutoff (March 2020)
