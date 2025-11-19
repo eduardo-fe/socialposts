@@ -1,0 +1,12 @@
+﻿Cost centre,"Contract salary < £22,681 ","Contract salary ≥ £22,681 and < £28,759 ","Contract salary ≥ £28,759 and < £38,205 ","Contract salary ≥ £38,205 and < £51,283 ","Contract salary ≥ £51,283 and < £68,857 ","Contract salary ≥ £68,857 ",Total
+"Medicine, dentistry & health",5,100,"3,775","14,555","13,205","7,955","39,590"
+"Agriculture, forestry & veterinary science",0,25,350,840,745,440,"2,395"
+"Biological, mathematical & physical sciences",5,65,"2,765","9,925","7,680","6,155","26,595"
+Engineering & technology,0,80,"2,420","8,475","7,665","4,565","23,210"
+Architecture & planning,0,5,195,780,"1,255",615,"2,845"
+Administrative & business studies,5,55,635,"5,070","6,330","3,130","15,215"
+Social studies,5,45,"1,035","6,450","8,565","5,180","21,280"
+Humanities & language based studies & archaeology,0,20,600,"3,220","4,275","3,240","11,360"
+"Design, creative & performing arts",0,85,775,"2,380","3,000","1,150","7,395"
+Education,0,35,390,"2,310","3,920","1,190","7,845"
+"Central administration & services, staff & student facilities",5,15,90,295,165,490,"1,055"
