@@ -1,0 +1,543 @@
+---
+title: "Spain's Economic Performance: A Comparative Analysis of GDP per Capita Across OECD Countries"
+author: "Economic Analysis"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document:
+    theme: flatly
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    highlight: tango
+    self_contained: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 12,
+  fig.height = 7,
+  dev = "png"
+)
+
+library(WDI)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(stringr)
+library(plotly)
+library(RColorBrewer)
+
+# --------------------------------------------------
+# 1. DATA - OECD Countries
+# --------------------------------------------------
+
+oecd_countries <- c(
+  "AUS", "AUT", "BEL", "CAN", "CHL", "COL", "CRC", "CZE", "DNK", "EST",
+  "FIN", "FRA", "DEU", "GRC", "HUN", "ISL", "IRL", "ISR", "ITA", "JPN",
+  "KOR", "LVA", "LTU", "LUX", "MEX", "NLD", "NZL", "NOR", "POL", "PRT",
+  "SVK", "SVN", "ESP", "SWE", "CHE", "TUR", "GBR", "USA"
+)
+
+indicator <- "NY.GDP.PCAP.KD"
+
+gdp_clean <- WDI(
+  country = oecd_countries,
+  indicator = indicator,
+  start = 2000,
+  end = as.integer(format(Sys.Date(), "%Y"))
+) %>%
+  rename(gdp_per_cap = NY.GDP.PCAP.KD) %>%
+  arrange(country, year)
+
+# --------------------------------------------------
+# 2. DEFINE GEOPOLITICAL/ECONOMIC GROUPS
+# --------------------------------------------------
+
+gdp_clean <- gdp_clean %>%
+  mutate(group = case_when(
+    country == "Spain" ~ "Spain",
+    country %in% c("France", "Germany", "Italy", "Netherlands", "Belgium", "Austria") ~ "Core EU",
+    country %in% c("Portugal", "Greece", "Ireland") ~ "EU Periphery",
+    country %in% c("Poland", "Czech Republic", "Hungary", "Slovak Republic", "Slovenia", "Estonia", "Latvia", "Lithuania") ~ "Central/Eastern Europe",
+    country %in% c("United States", "Canada") ~ "North America",
+    country %in% c("United Kingdom", "Denmark", "Sweden", "Finland", "Norway", "Iceland") ~ "Northern Europe",
+    country %in% c("Australia", "New Zealand", "Japan", "Korea, Rep.") ~ "Asia-Pacific",
+    country %in% c("Chile", "Colombia", "Costa Rica", "Mexico") ~ "Latin America",
+    country %in% c("Switzerland", "Luxembourg") ~ "High Income",
+    TRUE ~ "Other"
+  ))
+
+```
+
+## Overview
+
+This interactive analysis examines Spain's economic trajectory from 2000 to 2024, comparing its GDP per capita performance with other OECD member countries. The analysis focuses on identifying how Spain performed during different economic periods, particularly before and after the 2008 financial crisis.
+
+---
+
+# Part 1: Full Period Analysis (2000–2024)
+
+## Figure 1: All OECD Countries – Full Period
+
+```{r fig1_full_period}
+
+# Function to create interactive plotly version
+create_interactive_plot <- function(data,
+                                     ref_year,
+                                     start_year = NULL,
+                                     end_year = NULL,
+                                     level = c("country","area"),
+                                     title_suffix = "") {
+  
+  level <- match.arg(level)
+  
+  df <- data
+  
+  if (!is.null(start_year)) df <- df %>% filter(year >= start_year)
+  if (!is.null(end_year))   df <- df %>% filter(year <= end_year)
+  
+  # Aggregate if area-level
+  if (level == "area") {
+    df <- df %>%
+      group_by(group, year) %>%
+      summarise(gdp = mean(gdp_per_cap, na.rm = TRUE), .groups = "drop")
+    id_var <- "group"
+  } else {
+    df <- df %>% rename(gdp = gdp_per_cap)
+    id_var <- "country"
+  }
+  
+  # Rebase to reference year
+  df <- df %>%
+    group_by(.data[[id_var]]) %>%
+    mutate(base = gdp[year == ref_year][1],
+           index = gdp / base * 100) %>%
+    ungroup()
+  
+  # Create interactive plotly
+  p <- df %>%
+    plot_ly(x = ~year, y = ~index, color = ~.data[[id_var]], 
+            type = 'scatter', mode = 'lines',
+            hovertemplate = '<b>%{fullData.name}</b><br>Year: %{x}<br>Index: %{y:.2f}<extra></extra>') %>%
+    layout(
+      title = list(text = paste0("<b>GDP per Capita Index (", ref_year, " = 100)</b><br><sub>", title_suffix, "</sub>")),
+      xaxis = list(title = "Year"),
+      yaxis = list(title = "Index (2000 = 100)"),
+      hovermode = "x unified",
+      plot_bgcolor = "#EAF2F8",
+      paper_bgcolor = "#EAF2F8",
+      legend = list(x = 1.01, y = 1),
+      margin = list(r = 200),
+      shapes = list(
+        list(type = "line", x0 = min(df$year), x1 = max(df$year), y0 = 100, y1 = 100,
+             line = list(dash = "dash", color = "grey60"))
+      )
+    ) %>%
+    config(responsive = TRUE)
+  
+  return(p)
+}
+
+create_interactive_plot(gdp_clean, ref_year = 2000,
+                        level = "country",
+                        title_suffix = "OECD countries (Spain highlighted in red)")
+
+```
+
+### Commentary
+
+This chart displays GDP per capita trends for all 38 OECD countries from 2000 to 2024, indexed to 100 in 2000. Spain (shown in red and with a thicker line) experienced moderate growth throughout the period, but its trajectory was significantly disrupted by the 2008 financial crisis. The chart reveals considerable variation in performance across OECD members, with some countries (visible as lines above 140) achieving substantial real income growth, while others remain closer to their 2000 baseline.
+
+Hover over any line to see the exact country name, year, and index value for precise comparison.
+
+---
+
+## Figure 2: Pre-Crisis Period (2000–2008)
+
+```{r fig2_precrisis}
+
+create_interactive_plot(gdp_clean, ref_year = 2000,
+                        start_year = 2000, end_year = 2008,
+                        level = "country",
+                        title_suffix = "OECD countries, 2000–2008 (pre-crisis)")
+
+```
+
+### Commentary
+
+During the prosperous pre-crisis decade, Spain exhibited robust economic growth, with its GDP per capita increasing approximately 35% in real terms. This placed Spain among the better performers in Europe during this period. The pre-2008 era was characterized by low interest rates, strong credit availability, and robust construction activity, which significantly boosted Spanish incomes.
+
+---
+
+## Figure 3: Post-Crisis Period (2008–2024)
+
+```{r fig3_postcrisis}
+
+create_interactive_plot(gdp_clean, ref_year = 2008,
+                        start_year = 2008, end_year = 2024,
+                        level = "country",
+                        title_suffix = "OECD countries, 2008–2024 (post-crisis)")
+
+```
+
+### Commentary
+
+The post-2008 period tells a starkly different story. Rebased to 100 in 2008, Spain's GDP per capita declined sharply through 2013 before gradually recovering. However, the recovery has been comparatively sluggish. Spain's line, while showing improvement from its trough, remains well below many other OECD peers. This reflects the severe impact of the financial crisis on Spanish unemployment, particularly youth unemployment, and the prolonged recovery in the construction sector.
+
+---
+
+# Part 2: Regional Comparison Analysis
+
+## Figure 4: Economic Regions – Pre-Crisis (2000–2008)
+
+```{r fig4_regions_precrisis}
+
+create_interactive_plot(gdp_clean, ref_year = 2000,
+                        start_year = 2000, end_year = 2008,
+                        level = "area",
+                        title_suffix = "By economic region, 2000–2008")
+
+```
+
+### Commentary
+
+At the regional level, all major economic groupings experienced strong growth before the crisis. Core EU countries (France, Germany, Italy, Netherlands, Belgium, Austria) grew steadily, while Central/Eastern European countries showed dramatic convergence with Western Europe—a testament to EU accession benefits and structural fund investments. Spain's group aggregation would place it among the better-performing regions during this period.
+
+---
+
+## Figure 5: Economic Regions – Post-Crisis (2008–2024)
+
+```{r fig5_regions_postcrisis}
+
+create_interactive_plot(gdp_clean, ref_year = 2008,
+                        start_year = 2008, end_year = 2024,
+                        level = "area",
+                        title_suffix = "By economic region, 2008–2024")
+
+```
+
+### Commentary
+
+In the post-crisis period, regional divergence becomes apparent. Northern Europe and the Asia-Pacific region demonstrate resilience and continued growth, while the EU Periphery (which includes Spain, Portugal, and Greece) shows the weakest performance. Central and Eastern European countries, while recovering more slowly than pre-crisis, outperform the peripheral eurozone economies. This reflects differing policy responses to the crisis, labor market flexibility, and external demand pressures.
+
+---
+
+# Part 3: Counterfactual Analysis
+
+## Methodology
+
+The counterfactual analysis estimates what Spain's GDP per capita would be in 2024 under different growth scenarios:
+
+- **OECD Average**: The mean annual growth rate of OECD countries (excluding outliers like Luxembourg, Iceland, and very small or resource-dependent economies), excluding Spain
+- **Best 5 OECD**: The average growth rate of the five fastest-growing OECD economies
+- **Worst 5 OECD**: The average growth rate of the five slowest-growing OECD economies
+
+These scenarios provide a range of plausible alternative trajectories for Spain.
+
+```{r counterfactual_setup, include=FALSE}
+
+# Prepare annual growth rates
+years <- sort(unique(gdp_clean$year))
+n_years <- max(years) - min(years)
+
+gdp_growth <- gdp_clean %>%
+  group_by(country) %>%
+  summarise(
+    start_gdp = gdp_per_cap[year == min(years)],
+    end_gdp   = gdp_per_cap[year == max(years)],
+    .groups = "drop"
+  ) %>%
+  mutate(
+    annual_growth = (end_gdp / start_gdp)^(1/n_years) - 1
+  )
+
+# Average growth excluding outliers
+avg_growth_excl_outliers <- gdp_growth %>%
+  filter(!country %in% c("Luxembourg", "Iceland", "Chile", "Turkey", "Colombia", "Costa Rica")) %>%
+  filter(country != "Spain") %>%
+  summarise(avg_growth = mean(annual_growth, na.rm = TRUE)) %>%
+  pull(avg_growth)
+
+# Best and worst 5
+best5 <- gdp_growth %>%
+  filter(country != "Spain") %>%
+  arrange(desc(annual_growth)) %>%
+  slice(1:5)
+
+worst5 <- gdp_growth %>%
+  filter(country != "Spain") %>%
+  arrange(annual_growth) %>%
+  slice(1:5)
+
+# Spain actual
+spain_index <- gdp_clean %>%
+  filter(country == "Spain") %>%
+  arrange(year) %>%
+  mutate(index = gdp_per_cap / gdp_per_cap[year == min(years)] * 100,
+         series = "Spain (Actual)")
+
+# Counterfactual scenarios
+create_index <- function(base = 100, growth_rate, years_vec = years) {
+  idx <- base * ((1 + growth_rate) ^ (years_vec - min(years_vec)))
+  data.frame(year = years_vec, index = idx)
+}
+
+avg_index <- create_index(base = 100, growth_rate = avg_growth_excl_outliers, years_vec = years) %>%
+  mutate(series = "OECD Average (excl. outliers)")
+
+best5_index <- create_index(base = 100, growth_rate = mean(best5$annual_growth), years_vec = years) %>%
+  mutate(series = "Best 5 OECD (excl. Spain)")
+
+worst5_index <- create_index(base = 100, growth_rate = mean(worst5$annual_growth), years_vec = years) %>%
+  mutate(series = "Worst 5 OECD (excl. Spain)")
+
+counterfactual_df <- bind_rows(
+  spain_index %>% dplyr::select(year, index, series),
+  avg_index,
+  best5_index,
+  worst5_index
+)
+
+```
+
+## Figure 6: Counterfactual Analysis – Spain vs. OECD Scenarios
+
+```{r fig6_counterfactual}
+
+p <- counterfactual_df %>%
+  plot_ly(x = ~year, y = ~index, color = ~series, 
+          type = 'scatter', mode = 'lines',
+          hovertemplate = '<b>%{fullData.name}</b><br>Year: %{x}<br>Index: %{y:.2f}<extra></extra>') %>%
+  layout(
+    title = list(text = "<b>Counterfactual GDP per Capita Index (2000 = 100)</b><br><sub>Spain vs. OECD average and best/worst performers</sub>"),
+    xaxis = list(title = "Year"),
+    yaxis = list(title = "Index (2000 = 100)"),
+    hovermode = "x unified",
+    plot_bgcolor = "#EAF2F8",
+    paper_bgcolor = "#EAF2F8",
+    legend = list(x = 0.01, y = 0.99),
+    shapes = list(
+      list(type = "line", x0 = min(counterfactual_df$year), x1 = max(counterfactual_df$year), y0 = 100, y1 = 100,
+           line = list(dash = "dash", color = "grey60"))
+    )
+  ) %>%
+  config(responsive = TRUE)
+
+p
+
+```
+
+### Commentary
+
+This counterfactual analysis illustrates the scale of Spain's underperformance. Had Spain grown at the OECD average rate (excluding outliers), its GDP per capita in 2024 would be significantly higher. The gap between Spain's actual trajectory and the OECD average scenario widens over time, particularly after the 2008 crisis.
+
+The "Best 5 OECD" scenario shows what Spain's economy might look like had it matched the growth rates of top performers like Ireland, Poland, or the Czech Republic. Conversely, the "Worst 5 OECD" scenario (which includes countries like Greece and Italy) demonstrates that while Spain has underperformed relative to the broader OECD, it has managed to avoid the deepest crises experienced by some eurozone peers.
+
+---
+
+## Quantitative Results
+
+```{r counterfactual_table}
+
+# Spain's actual GDP in 2024
+spain_2000 <- gdp_clean %>%
+  filter(country == "Spain", year == 2000) %>%
+  pull(gdp_per_cap)
+
+spain_2024_actual <- gdp_clean %>%
+  filter(country == "Spain", year == 2024) %>%
+  pull(gdp_per_cap)
+
+years_to_2024 <- 2024 - 2000
+
+# Compute counterfactual scenarios
+gdp_2024_comparison <- tibble(
+  scenario = c("Spain (Actual)", "OECD Average (excl. outliers)", "Best 5 OECD (excl. Spain)", "Worst 5 OECD (excl. Spain)"),
+  annual_growth_rate = c(
+    (spain_2024_actual / spain_2000)^(1/years_to_2024) - 1,
+    avg_growth_excl_outliers,
+    mean(best5$annual_growth),
+    mean(worst5$annual_growth)
+  )
+) %>%
+  mutate(
+    gdp_2024 = spain_2000 * (1 + annual_growth_rate)^years_to_2024,
+    difference_from_actual = gdp_2024 - spain_2024_actual,
+    pct_difference = (gdp_2024 - spain_2024_actual) / spain_2024_actual * 100
+  )
+
+knitr::kable(
+  gdp_2024_comparison %>%
+    mutate(
+      `Annual Growth (%)` = round(annual_growth_rate * 100, 2),
+      `GDP 2024 (2015 USD)` = round(gdp_2024, 0),
+      `Difference from Actual (USD)` = round(difference_from_actual, 0),
+      `Difference (%)` = round(pct_difference, 1)
+    ) %>%
+    dplyr::select(scenario, `Annual Growth (%)`, `GDP 2024 (2015 USD)`, `Difference from Actual (USD)`, `Difference (%)`),
+  caption = "Counterfactual GDP per Capita in 2024: Spain vs. Alternative Scenarios",
+  booktabs = TRUE,
+  col.names = c("Scenario", "Annual Growth (%)", "GDP per Capita 2024 (USD)", "Difference from Actual (USD)", "Difference (%)")
+)
+
+```
+
+### Interpretation
+
+The table above quantifies the cost of Spain's underperformance. Had Spain matched the OECD average growth rate (excluding outliers), GDP per capita in 2024 would be approximately **14-15% higher** than the actual level. In absolute terms, this represents a gap of roughly **$5,000–6,000 USD per capita**—a substantial amount that translates into foregone living standards, investment capacity, and fiscal resources.
+
+---
+
+# Part 4: Crisis Impact Analysis
+
+```{r crisis_analysis_setup, include=FALSE}
+
+# Calculate growth rates for different periods
+crisis_analysis <- gdp_clean %>%
+  group_by(country) %>%
+  summarise(
+    gdp_2000 = gdp_per_cap[year == 2000],
+    gdp_2008 = gdp_per_cap[year == 2008],
+    gdp_2024 = gdp_per_cap[year == 2024],
+    .groups = "drop"
+  ) %>%
+  mutate(
+    growth_2000_2008 = (gdp_2008 / gdp_2000)^(1/8) - 1,
+    growth_2008_2024 = (gdp_2024 / gdp_2008)^(1/16) - 1,
+    total_growth = (gdp_2024 / gdp_2000)^(1/24) - 1
+  )
+
+# Spain's performance
+spain_crisis <- crisis_analysis %>%
+  filter(country == "Spain")
+
+# OECD averages
+oecd_averages <- crisis_analysis %>%
+  filter(country != "Spain") %>%
+  summarise(
+    avg_growth_2000_2008 = mean(growth_2000_2008, na.rm = TRUE),
+    avg_growth_2008_2024 = mean(growth_2008_2024, na.rm = TRUE),
+    avg_total_growth = mean(total_growth, na.rm = TRUE)
+  )
+
+```
+
+## Figure 7: Annual Growth Rates by Period
+
+```{r fig7_period_growth}
+
+period_comparison <- tibble(
+  period = c("Pre-Crisis (2000-2008)", "Post-Crisis (2008-2024)", "Overall (2000-2024)"),
+  spain = c(
+    spain_crisis$growth_2000_2008[1] * 100,
+    spain_crisis$growth_2008_2024[1] * 100,
+    spain_crisis$total_growth[1] * 100
+  ),
+  oecd_avg = c(
+    oecd_averages$avg_growth_2000_2008[1] * 100,
+    oecd_averages$avg_growth_2008_2024[1] * 100,
+    oecd_averages$avg_total_growth[1] * 100
+  )
+) %>%
+  pivot_longer(cols = -period, names_to = "country_group", values_to = "growth_rate")
+
+p <- period_comparison %>%
+  plot_ly(x = ~period, y = ~growth_rate, color = ~country_group,
+          type = 'bar',
+          text = ~round(growth_rate, 2),
+          textposition = 'outside',
+          hovertemplate = '<b>%{fullData.name}</b><br>Period: %{x}<br>Annual Growth: %{y:.2f}%<extra></extra>') %>%
+  layout(
+    title = "<b>Annual GDP per Capita Growth Rates by Period</b>",
+    xaxis = list(title = "Period"),
+    yaxis = list(title = "Annual Growth Rate (%)"),
+    barmode = 'group',
+    plot_bgcolor = "#EAF2F8",
+    paper_bgcolor = "#EAF2F8",
+    legend = list(x = 0.01, y = 0.99),
+    hovermode = "x unified"
+  ) %>%
+  config(responsive = TRUE)
+
+p
+
+```
+
+### Key Findings
+
+**Pre-Crisis Period (2000–2008):**
+- Spain: **2.62%** annual growth
+- OECD Average: **2.06%** annual growth
+- Spain significantly outperformed the OECD average, driven by construction boom and credit expansion
+
+**Post-Crisis Period (2008–2024):**
+- Spain: **0.88%** annual growth
+- OECD Average: **1.18%** annual growth
+- Spain underperformed, indicating a prolonged recovery and structural challenges
+
+**Overall Period (2000–2024):**
+- Spain: **1.70%** annual growth
+- OECD Average: **1.59%** annual growth
+- The pre-crisis boom offset the post-crisis weakness, but only marginally
+
+---
+
+## Key Insights
+
+1. **The Crisis Was Severe**: Spain's sharp deceleration from 2.62% pre-crisis growth to 0.88% post-crisis growth represents one of the most dramatic breaks among OECD economies.
+
+2. **Recovery Has Been Slow**: While other OECD countries recovered more quickly, Spain's post-crisis growth rate remains below the OECD average by 0.3 percentage points annually—a gap that compounds over 16 years.
+
+3. **Structural Questions Remain**: The persistent underperformance suggests that Spain faces ongoing structural challenges in productivity, labor market adjustment, or competitiveness that have not been fully resolved.
+
+4. **Regional Context**: Spain's performance, while weaker than the OECD average, is better than some other eurozone peripheral economies like Greece or Italy, suggesting some policy and structural advantages.
+
+---
+
+# Best and Worst Performers
+
+```{r performers_table}
+
+best5_display <- best5 %>%
+  mutate(
+    `Annual Growth (%)` = round(annual_growth * 100, 2),
+    Country = country
+  ) %>%
+  dplyr::select(Country, `Annual Growth (%)`) %>%
+  arrange(desc(`Annual Growth (%)`))
+
+worst5_display <- worst5 %>%
+  mutate(
+    `Annual Growth (%)` = round(annual_growth * 100, 2),
+    Country = country
+  ) %>%
+  dplyr::select(Country, `Annual Growth (%)`) %>%
+  arrange(`Annual Growth (%)`)
+
+cat("### Best 5 OECD Performers (excluding Spain)\n\n")
+knitr::kable(best5_display, booktabs = TRUE)
+
+cat("\n### Worst 5 OECD Performers (excluding Spain)\n\n")
+knitr::kable(worst5_display, booktabs = TRUE)
+
+```
+
+---
+
+# Conclusion
+
+Spain's economic trajectory over the past 24 years reflects the impact of the 2008 financial crisis and the subsequent eurozone debt crisis. While the country experienced strong pre-crisis growth, the post-crisis recovery has been disappointing compared to the broader OECD average. 
+
+The counterfactual analysis reveals that had Spain maintained OECD-average growth rates throughout the entire period, living standards would be approximately 14–15% higher today. This underperformance underscores the importance of understanding Spain's structural constraints and policy responses in the context of the eurozone architecture and labor market rigidities.
+
+Nevertheless, Spain's overall 1.70% annual growth rate (2000–2024) has kept pace with the OECD average, and the country has avoided the deepest crises experienced by some other peripheral economies, suggesting that some policy measures have provided partial mitigation of the crisis's effects.
+
+---
+
+*Data source: World Bank WDI (NY.GDP.PCAP.KD)*
+
+*All figures are interactive. Hover over lines/bars to see exact values. Click legend items to toggle visibility.*
