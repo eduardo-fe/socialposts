@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Institutional Capture in Spain — Monitor 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #14171f;
+    --surface2: #1c2030;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text: #e8eaf0;
+    --muted: #8a8fa8;
+    --faint: #4a4f65;
+    --red: #e05252;
+    --red-bg: rgba(224,82,82,0.12);
+    --red-border: rgba(224,82,82,0.3);
+    --orange: #e08a3c;
+    --orange-bg: rgba(224,138,60,0.12);
+    --orange-border: rgba(224,138,60,0.3);
+    --yellow: #c9a84c;
+    --yellow-bg: rgba(201,168,76,0.12);
+    --yellow-border: rgba(201,168,76,0.3);
+    --green: #4cad7a;
+    --green-bg: rgba(76,173,122,0.12);
+    --green-border: rgba(76,173,122,0.3);
+    --blue: #5b8dee;
+    --purple: #9b7de8;
+    --accent: #c94040;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+    --radius: 6px;
+    --radius-lg: 10px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border2);
+    padding: 2rem 2.5rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+  .title-block h1 {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .title-block p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: var(--font-mono);
+    letter-spacing: 0.04em;
+  }
+  .stats-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .stat-pill {
+    text-align: center;
+    padding: 6px 16px;
+    border-radius: 40px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    letter-spacing: 0.03em;
+    border: 1px solid;
+  }
+  .stat-pill.red   { background: var(--red-bg);    border-color: var(--red-border);    color: var(--red); }
+  .stat-pill.orange{ background: var(--orange-bg);  border-color: var(--orange-border);  color: var(--orange); }
+  .stat-pill.yellow{ background: var(--yellow-bg);  border-color: var(--yellow-border);  color: var(--yellow); }
+  .stat-pill.green { background: var(--green-bg);   border-color: var(--green-border);   color: var(--green); }
+  .stat-pill span { font-size: 18px; display: block; line-height: 1; margin-bottom: 2px; }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 220px;
+    max-width: 380px;
+  }
+  .search-wrap svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.4;
+  }
+  input[type="text"] {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 13px;
+    padding: 7px 12px 7px 34px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type="text"]:focus { border-color: rgba(255,255,255,0.3); }
+  input[type="text"]::placeholder { color: var(--faint); }
+
+  .filter-group { display: flex; gap: 5px; flex-wrap: wrap; }
+  .fbtn {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .fbtn:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
+  .fbtn.active { color: #fff; border-color: transparent; }
+  .fbtn.active.f-all    { background: rgba(255,255,255,0.12); color: #fff; }
+  .fbtn.active.f-3      { background: var(--red-bg);    border-color: var(--red-border);    color: var(--red); }
+  .fbtn.active.f-2      { background: var(--orange-bg);  border-color: var(--orange-border);  color: var(--orange); }
+  .fbtn.active.f-1      { background: var(--yellow-bg);  border-color: var(--yellow-border);  color: var(--yellow); }
+  .fbtn.active.f-0      { background: var(--green-bg);   border-color: var(--green-border);   color: var(--green); }
+
+  /* MAIN */
+  main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem 2.5rem;
+  }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+    margin: 2rem 0 1rem;
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 12px;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.15s;
+    cursor: default;
+  }
+  .card:hover { border-color: var(--border2); transform: translateY(-1px); }
+  .card-accent-bar { height: 3px; }
+  .decay-3 .card-accent-bar { background: var(--red); }
+  .decay-2 .card-accent-bar { background: var(--orange); }
+  .decay-1 .card-accent-bar { background: var(--yellow); }
+  .decay-0 .card-accent-bar { background: var(--green); }
+
+  .card-head {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-head-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .inst-name {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+    flex: 1;
+  }
+  .decay-badge {
+    font-size: 10px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 1px solid;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .decay-3 .decay-badge { background: var(--red-bg);    border-color: var(--red-border);    color: var(--red); }
+  .decay-2 .decay-badge { background: var(--orange-bg);  border-color: var(--orange-border);  color: var(--orange); }
+  .decay-1 .decay-badge { background: var(--yellow-bg);  border-color: var(--yellow-border);  color: var(--yellow); }
+  .decay-0 .decay-badge { background: var(--green-bg);   border-color: var(--green-border);   color: var(--green); }
+
+  .person-name {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 2px;
+  }
+  .person-role {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  /* TAGS */
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+    font-family: var(--font-mono);
+  }
+  .tag-party    { background: rgba(155,125,232,0.15); color: #b39af0; border: 1px solid rgba(155,125,232,0.3); }
+  .tag-minister { background: rgba(91,141,238,0.15);  color: #8ab0f5; border: 1px solid rgba(91,141,238,0.3); }
+  .tag-candidate{ background: rgba(224,138,60,0.15);  color: #e0a060; border: 1px solid rgba(224,138,60,0.3); }
+  .tag-relative { background: rgba(224,100,150,0.15); color: #e080b0; border: 1px solid rgba(224,100,150,0.3); }
+  .tag-appt     { background: rgba(224,82,82,0.15);   color: #e08080; border: 1px solid rgba(224,82,82,0.3); }
+  .tag-assoc    { background: rgba(76,173,122,0.12);  color: #6ac99a; border: 1px solid rgba(76,173,122,0.25); }
+  .tag-clean    { background: rgba(76,173,122,0.08);  color: #4cad7a; border: 1px solid rgba(76,173,122,0.2); }
+  .tag-legal    { background: rgba(201,64,64,0.2);    color: #e06060; border: 1px solid rgba(201,64,64,0.4); }
+
+  /* METER */
+  .meter-wrap { padding: 10px 16px 0; }
+  .meter-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    margin-bottom: 4px;
+  }
+  .meter-score { font-weight: 600; }
+  .meter-track {
+    height: 4px;
+    background: var(--surface2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .meter-fill { height: 100%; border-radius: 2px; }
+
+  /* BIO */
+  .card-bio {
+    padding: 10px 16px 8px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.55;
+    font-style: italic;
+  }
+
+  /* EXPAND TOGGLE */
+  .toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0 16px 10px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--faint);
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 8px;
+    width: fit-content;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .toggle-btn:hover { color: var(--muted); border-color: var(--border2); }
+  .toggle-arrow { transition: transform 0.2s; display: inline-block; }
+  .toggle-btn.open .toggle-arrow { transform: rotate(180deg); }
+
+  /* DETAIL PANEL */
+  .detail-panel {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 12px 16px 14px;
+    background: var(--surface2);
+  }
+  .detail-panel.open { display: block; }
+  .detail-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 12px;
+  }
+  .detail-row:last-child { margin-bottom: 0; }
+  .detail-key {
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding-top: 1px;
+    line-height: 1.5;
+  }
+  .detail-val {
+    color: var(--text);
+    line-height: 1.55;
+    font-size: 12px;
+  }
+  .detail-val strong { color: #fff; font-weight: 600; }
+  .legal-warning {
+    background: rgba(201,64,64,0.12);
+    border: 1px solid rgba(201,64,64,0.3);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 11px;
+    color: #e08080;
+    font-family: var(--font-mono);
+    margin-top: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  /* LEGEND BAR */
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    font-family: var(--font-mono);
+  }
+  .leg { display: flex; align-items: center; gap: 6px; }
+  .leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* COUNT */
+  .count-line {
+    font-size: 11px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    margin-bottom: 1rem;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2.5rem;
+    font-size: 11px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* NO RESULTS */
+  .no-results {
+    text-align: center;
+    padding: 3rem;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  /* RESPONSIVE */
+  @media(max-width: 640px) {
+    header { padding: 1.25rem 1rem 1rem; }
+    main { padding: 1rem; }
+    .cards-grid { grid-template-columns: 1fr; }
+    footer { padding: 1rem; }
+  }
+
+  /* HOW TO UPDATE NOTE */
+  .how-to-note {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    line-height: 1.7;
+  }
+  .how-to-note h3 { color: var(--text); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .how-to-note code { background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 3px; color: var(--blue); font-size: 11px; }
+  details.note-details summary { cursor: pointer; color: var(--blue); font-size: 11px; margin-bottom: 0.5rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="title-block">
+      <h1>Institutional Capture in Spain</h1>
+      <p>INSTITUTIONAL INDEPENDENCE MONITOR // UPDATED MARCH 2026</p>
+    </div>
+    <div class="stats-row" id="stats"></div>
+  </div>
+  <div class="controls">
+    <div class="search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search" placeholder="Search institution, person, party…"/>
+    </div>
+    <div class="filter-group">
+      <button class="fbtn active f-all" data-f="all">All</button>
+      <button class="fbtn f-3" data-f="3">Clear capture</button>
+      <button class="fbtn f-2" data-f="2">Significant</button>
+      <button class="fbtn f-1" data-f="1">Mild</button>
+      <button class="fbtn f-0" data-f="0">Independent</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <details class="how-to-note">
+    <summary class="note-details">▾ How to update this document</summary>
+    <h3>To add or edit profiles:</h3>
+    Open this file in any text editor (Notepad, VS Code, etc.) and locate the <code>const DATA</code> array in the <code>&lt;script&gt;</code> block at the end of the document.<br/><br/>
+    Each profile is an object with the following fields: <code>inst</code> (institution), <code>sector</code>, <code>person</code>, <code>role</code>, <code>decay</code> (0–3), <code>bio</code>, <code>partyLinks</code>, <code>appointment</code>, <code>controversies</code>, <code>relatives</code>, <code>legalIssues</code> (optional), <code>tags</code> (array of strings), <code>tagTypes</code> (array of CSS classes: tag-party, tag-minister, tag-candidate, tag-relative, tag-appt, tag-assoc, tag-clean, tag-legal), <code>indScore</code> (0–100).<br/><br/>
+    <strong>Capture scale:</strong> <code>0</code> = no evidence · <code>1</code> = mild links · <code>2</code> = significant colonisation · <code>3</code> = clear capture
+  </details>
+
+  <details class="how-to-note" style="margin-bottom:1rem;">
+    <summary class="note-details">▾ Methodological note — How the indices are constructed</summary>
+
+    <h3>1. What this monitor measures</h3>
+    This document measures the degree to which nominally independent institutions of the Spanish state have been colonised by political power, defining "colonisation" as any mechanism — formal or informal — that erodes an institution's capacity to act autonomously from the government of the day. The monitor does <strong>not</strong> issue legal judgements or assign criminal liability. All evaluations are analytical and based on publicly verifiable facts.<br/><br/>
+
+    <h3>2. Two complementary metrics</h3>
+    Each profile contains <strong>two distinct ratings</strong> measuring different things:<br/><br/>
+
+    <strong>a) Institutional capture level (decay, scale 0–3)</strong><br/>
+    Measures the <em>structural intensity</em> of politicisation of the role or institution, regardless of who holds it. Assessed across four dimensions:<br/>
+    &nbsp;· <strong>Appointment mechanism</strong>: is there an independent validation process (open competition, qualified parliamentary majority, bipartisan consensus) or does the government appoint freely?<br/>
+    &nbsp;· <strong>Profile of the incumbent</strong>: do they have an active political career, party membership, previous ministerial posts, or documented ties to the governing party?<br/>
+    &nbsp;· <strong>Pattern of institutional behaviour</strong>: do the institution's decisions systematically align with the interests of the party in power?<br/>
+    &nbsp;· <strong>Accumulated precedents</strong>: does the appointment break historical conventions, repeat a pattern established by the same government, or replace a previously annulled appointment?<br/><br/>
+    The resulting scale is: <code>0</code> no evidence of capture · <code>1</code> mild links (technical profile with minor political connection) · <code>2</code> significant colonisation (clearly political profile or aligned behavioural pattern) · <code>3</code> clear capture (active party membership, direct appointment without independent process and/or systematically executive-aligned behaviour).<br/><br/>
+
+    <strong>b) Independence index (indScore, scale 0–100)</strong><br/>
+    Measures the <em>perceived effective independence</em> of the specific incumbent, weighting factors that may mitigate or aggravate structural capture. A post may sit within an institution with a weak appointment mechanism (high decay) but its holder may have demonstrated real autonomy in their decisions (indScore higher than expected), or vice versa.<br/><br/>
+    Factors that <strong>lower</strong> the indScore (more effective capture):<br/>
+    &nbsp;· Active or past membership of the governing party (<code>tag-party</code>)<br/>
+    &nbsp;· Having held ministerial or government posts (<code>tag-minister</code>)<br/>
+    &nbsp;· Having stood as the party's electoral candidate (<code>tag-candidate</code>)<br/>
+    &nbsp;· Appointment without an external fitness process (<code>tag-appt</code>)<br/>
+    &nbsp;· Documented family or personal ties to power (<code>tag-relative</code>)<br/>
+    &nbsp;· Pending criminal or administrative proceedings (<code>tag-legal</code>)<br/><br/>
+    Factors that <strong>raise</strong> the indScore (more effective independence):<br/>
+    &nbsp;· Technical profile with no prior political career (<code>tag-clean</code>)<br/>
+    &nbsp;· Documented decisions contrary to the interests of the appointing government (<code>tag-assoc</code> with favourable content)<br/>
+    &nbsp;· Appointment via genuine bipartisan consensus or external competitive process<br/>
+    &nbsp;· Continuity in post across governments of different political sign<br/><br/>
+    The weighting is analytical rather than mechanical: the relative importance of each factor is assessed in light of the specific institution and its mandate. Old, dormant party membership weighs less than an active ministerial role in the months preceding appointment.<br/><br/>
+
+    <h3>3. Relationship between the two metrics</h3>
+    The two metrics are intentionally independent. <em>Decay</em> evaluates the system; <em>indScore</em> evaluates the incumbent. In practice the correlation is strong (decay 3 → average indScore 9.8; decay 0 → average indScore 81.5), but significant divergences exist and are recorded explicitly. For instance: an institution with a weak appointment mechanism whose incumbent has demonstrated real autonomy will show decay 2 but indScore 55. That divergence is itself meaningful information.<br/><br/>
+
+    <h3>4. Limitations and biases of the monitor</h3>
+    &nbsp;· <strong>Selection bias</strong>: the monitor covers primarily the 2018–2026 period (Sánchez governments). Patterns of institutional colonisation under earlier governments (Aznar, Zapatero, Rajoy) are not covered with the same depth, though mentioned as context where relevant.<br/>
+    &nbsp;· <strong>Residual subjectivity</strong>: assigning scores involves analytical judgement. Two reasonable analysts might disagree by ±10 points on any given indScore.<br/>
+    &nbsp;· <strong>Information asymmetry</strong>: the opacity of some institutions (CNI, INCIBE, Enresa) means evaluation is necessarily less precise than for institutions subject to greater public scrutiny.<br/>
+    &nbsp;· <strong>Capture is not corruption</strong>: a low indScore does not imply that the incumbent has committed any offence or that their decisions are necessarily wrong. It measures a structural risk of loss of independence, not a proven outcome.<br/>
+    &nbsp;· <strong>Update required</strong>: profiles reflect the state of information available in March 2026. Posts, legal proceedings and controversies may change.
+  </details>
+
+  <details class="how-to-note" style="margin-bottom:1rem;">
+    <summary class="note-details">▾ Assessment — State of Institutional Independence in Spain (March 2026)</summary>
+
+    <h3>Overview</h3>
+    Of the 45 institutions tracked in this monitor, only 2 show no evidence of political capture (decay 0), while 8 exhibit clear capture (decay 3) and a further 15 show significant colonisation (decay 2). The average independence score across all institutions is <strong>42.6 out of 100</strong> — well below the midpoint, and below the threshold typically associated with effective institutional autonomy in comparative governance literature. Twenty-nine of the 45 positions are currently held by individuals who previously served as ministers, secretaries of state, or senior political appointees of the same government that named them. That is, <strong>64% of the institutions tracked are led by former officials of the executive branch that appointed them.</strong><br/><br/>
+
+    The picture that emerges is not one of sporadic political interference, but of a <strong>systematic and structurally embedded pattern</strong> of institutional colonisation that spans the constitutional, judicial, regulatory, media, and public enterprise spheres simultaneously.<br/><br/>
+
+    <h3>The Constitutional Tier: The Most Compromised Layer</h3>
+    The most alarming finding concerns the constitutional institutions — the bodies specifically designed by Spain's 1978 Constitution to act as counterweights to executive power. This sector records the lowest average independence score of any category: <strong>21.8 out of 100</strong>, with an average capture level of 2.4 out of 3. Three of the five constitutional institutions tracked score in the single digits.<br/><br/>
+
+    The <strong>Constitutional Court</strong> is led by a president (Cándido Conde-Pumpido, indScore: 8) who founded the progressive judicial association <em>Jueces para la Democracia</em>, served as Attorney General under the Zapatero government, and was elected by the progressive bloc installed by the Sánchez government. He is under criminal investigation by the Supreme Court — the first sitting Constitutional Court president in Spanish democratic history to face such proceedings. His vice-president (Inmaculada Montalbán, indScore: 7) publicly acknowledged PSOE membership during her Senate confirmation hearing and subsequently voted in favour of the amnesty law that benefited the very politician who had awarded her a regional medal of honour. Under this leadership, the Court has validated the Amnesty Law, repeatedly blocked opposition initiatives, and behaved, in the assessment of multiple constitutional scholars, as a political instrument of the governing coalition rather than as an independent arbiter of constitutionality.<br/><br/>
+
+    The <strong>Council of State</strong> — Spain's supreme consultative body, tasked with issuing independent legal opinions on government legislation — is led by Carmen Calvo (indScore: 6), a PSOE member of five parliamentary terms, former Deputy Prime Minister and cabinet minister under Sánchez, who was a sitting Member of Parliament until days before her appointment. She is the second consecutive former socialist minister to be placed in this role after the first (Magdalena Valerio) was annulled by the Supreme Court. The body charged with reviewing the legality of government bills is therefore led by a career politician of the governing party.<br/><br/>
+
+    The <strong>Ombudsman</strong> was until recently a three-time PSOE candidate for the Presidency of the Community of Madrid, whose appointment was interpreted by commentators across the political spectrum as a dignified exit from a failed electoral career rather than an institutional choice. The role requires a 3/5 parliamentary majority and the PP's agreement was secured, providing some democratic legitimacy — but the precedent of placing an active politician in a watchdog role within months of electoral defeat is structurally corrosive.<br/><br/>
+
+    <h3>The Revolving Door: From Cabinet to Regulator</h3>
+    The most pervasive mechanism of capture documented in this monitor is the direct transition of serving or recently departed government ministers and senior officials into the leadership of ostensibly independent institutions, with no cooling-off period, no competitive process, and no parliamentary ratification.<br/><br/>
+
+    The clearest cases follow a consistent template. <strong>José Luis Escrivá</strong> (indScore: 11) served as a cabinet minister for four years under Sánchez — including publicly criticising the Bank of Spain's analyses of his own pension reform — and was then appointed Governor of the Bank of Spain, the institution he had previously attacked, breaking a 45-year bipartisan convention. <strong>Beatriz Corredor</strong> (indScore: 12), a former Zapatero minister and PSOE regional candidate, was placed in charge of Red Eléctrica de España, the operator of the national electricity market, during the worst energy price crisis in Spain's recent history, while her government was simultaneously intervening politically in that same market. <strong>Raquel Sánchez</strong> (indScore: 8), Minister of Transport until 2023, was appointed President of Paradores de Turismo — the state's network of luxury heritage hotels — with no intervening period and no competitive process. <strong>Inés Olóndriz</strong> became President of AIReF, the independent fiscal watchdog, the day after she left her role as a senior official of the very Ministry of Finance whose accounts AIReF is mandated to scrutinise.<br/><br/>
+
+    This pattern — cabinet minister or high official to institutional presidency, directly and without process — is not an exception. It is the operating model. It is documented across the Bank of Spain, AIReF, Red Eléctrica, Paradores, SEPI, Renfe, ADIF, Aena, ICO, Enresa, Puertos del Estado, and the Council of State. The cumulative effect is the transformation of independent oversight bodies and state enterprises into extensions of the executive's personnel policy.<br/><br/>
+
+    <h3>The Statistics and Information Layer</h3>
+    Two institutions that produce the factual baseline for public and political debate deserve particular attention. The <strong>CIS</strong> (Centre for Sociological Research, indScore: 4) is the most extensively documented case of capture in this monitor. Its president has been a PSOE member since 1973, sat on the party's federal executive until days before his appointment, and has produced polling systematically biased in favour of the governing left across every regional election during his tenure — always in the same direction, always benefiting the parties of the governing coalition. He faces criminal charges for misuse of public funds. No other democracy in Western Europe has a sitting party official directing its official polling centre.<br/><br/>
+
+    The <strong>INE</strong> (National Statistics Institute, indScore: 52) presents a subtler but structurally important concern. In 2023 it revised upward Spain's entire GDP historical series, improving the debt-to-GDP ratio just before the general election. The revision may have been methodologically defensible, but the timing and the absence of any independent oversight of INE's methodological decisions — it is answerable to the Ministry of Economic Affairs whose figures it produces — means there is no institutional check on such interventions.<br/><br/>
+
+    <h3>The Media Ecosystem</h3>
+    Spain's public media landscape is fully captured. <strong>RTVE</strong>, the national broadcaster with the widest reach in Spain, is led by a president elected by the bloc of Sánchez's parliamentary allies over PP objections, and has faced repeated internal complaints from its own editorial council about systematic editorial bias. <strong>Agencia EFE</strong> (indScore: 22), the world's largest Spanish-language news agency and the primary source for hundreds of media outlets in Spain and Latin America, is presided over by a political journalist appointed by direct government decree with no independent process, giving the executive a global-reach information lever that is rarely discussed in analyses of media capture. The combined effect on the information environment is significant: the government controls the framing of news at the point of production, not just at the point of distribution.<br/><br/>
+
+    <h3>The Judicial and Prosecutorial Chain</h3>
+    The independence of the judiciary is formally stronger than the constitutional or executive tier, but faces a structural vulnerability: the governing body of the judiciary (CGPJ) and the Attorney General's office are both ultimately dependent on political appointment processes. Spain has had three successive Attorneys General under the Sánchez government, none appointed with opposition consensus. The most recent predecessor was criminally convicted for leaking private data about a political opponent. The current Fiscalía Anticorrupción — whose mandate is to prosecute political corruption — was appointed by the same Attorney General chain of command, creating a structural conflict of interest that is impossible to resolve within the current institutional design.<br/><br/>
+
+    <h3>What Genuine Independence Looks Like</h3>
+    The monitor also identifies the exceptions, which are instructive precisely because they are so few. The <strong>Nuclear Safety Council</strong> (indScore: 72) is the most technically independent regulator in this dataset — its president has a career built entirely within the institution, it reports to Parliament rather than the government, and its technical reports have on occasion contradicted official government policy on nuclear plant closures. The <strong>Prado Museum</strong> (indScore: 78) selected its current director through an internal competitive process supervised by its broad-based board of trustees. The <strong>National Library</strong> (indScore: 85) is led by a director who has served across governments of opposite political sign without being replaced — the clearest possible signal of genuine institutional independence. These three cases share a common structure: an appointment mechanism that limits direct government discretion, a technical career track within the institution itself, and a record of decisions that occasionally diverge from government preference.<br/><br/>
+
+    <h3>Structural Assessment</h3>
+    The data supports a finding that goes beyond individual appointments: Spain's system of institutional governance has a <strong>design flaw that has been exploited to structural completion</strong>. The legal framework governing most of these institutions allows — and in some cases requires — direct executive appointment with minimal or no external validation. In the absence of political culture norms that discourage such appointments (norms that operated informally during earlier democratic periods), the legal permissiveness translates directly into systematic capture.<br/><br/>
+
+    The problem is not primarily one of individual moral failure. Most of the people documented here are competent professionals. The problem is that a system designed with insufficient structural safeguards, operating under a government willing to use every legal margin available to it, produces capture at scale. The institutions most affected — the Constitutional Court, the Council of State, the Attorney General's office, the Bank of Spain, the national broadcaster, the national polling centre — are precisely those whose independence matters most for the quality of Spanish democracy.<br/><br/>
+
+    In comparative European terms, the breadth of simultaneous capture across constitutional, judicial, regulatory, and media institutions documented here is unusual for a consolidated Western democracy. It is more commonly associated with the early stages of democratic backsliding in Central and Eastern European contexts. Whether Spain is experiencing a temporary episode linked to a particular governing coalition's practices, or a more durable degradation of its institutional culture, will depend in large part on whether successor governments of any political colour reverse the precedents being set, or adopt and extend them.<br/><br/>
+
+    <em>Note: This assessment reflects the state of publicly available information as of March 2026. All evaluations are analytical, not legal. Reasonable analysts may disagree on individual scores by ±10 points. The monitor covers primarily the 2018–2026 period and does not claim that institutional capture is unique to, or originated with, the current government.</em>
+  </details>
+
+  <div class="legend">
+    <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>Clear capture (3)</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--orange)"></div>Significant colonisation (2)</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Mild links (1)</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--green)"></div>No evidence of capture (0)</div>
+  </div>
+
+  <div class="count-line" id="count"></div>
+  <div id="container"></div>
+</main>
+
+<footer>
+  <span>Institutional Capture Spain — Monitor 2026</span>
+  <span>Sources: press, Official State Gazette (BOE), institutional websites, court rulings. Indices are analytical assessments, not legal judgements.</span>
+</footer>
+
+<script>
+/* =============================================================
+   DATA — edit here to add or modify profiles
+   ============================================================= */
+const DATA = [
+  /* ── CONSTITUTIONAL INSTITUTIONS ── */
+  {
+    inst: "Tribunal Constitucional",
+    sector: "Constitutional Institutions",
+    person: "Cándido Conde-Pumpido",
+    role: "Presidente (2023 – mandato vencido dic. 2025, sigue en funciones)",
+    decay: 3,
+    bio: "Jurista gallego, nacido en 1949. Proviene de una extensa familia de magistrados y fiscales gallegos (tres generaciones en la judicatura).",
+    partyLinks: "No afiliado formalmente al PSOE, pero toda su carrera ascendente está ligada a gobiernos socialistas. Fundador de Jueces para la Democracia (asociación judicial progresista, creada en 1984 para contrarrestar la influencia conservadora en la judicatura). Fiscal General del Estado con Zapatero (2004–2011), durante cuyo mandato suavizó la petición de pena al etarra De Juana Chaos y retiró cargos contra el líder de Batasuna Arnaldo Otegi, en sintonía con la política de diálogo del Gobierno socialista.",
+    appointment: "Designado magistrado del TC por el Senado en 2017 (mayoría PSOE). Elegido presidente por el bloque progresista con 6 votos contra 5, tras la renovación que en enero de 2023 otorgó mayoría al sector afín al Gobierno. Su mandato venció en diciembre de 2025 y sigue sin renovarse por el bloqueo entre PP y PSOE.",
+    controversies: "Bajo su presidencia el TC ha avalado la Ley de Amnistía que beneficia al independentismo catalán y a los condenados por los ERE. El TC bloqueó repetidamente iniciativas del PP. Frase paradigmática: 'el vuelo de las togas no eludirá el contacto con el polvo del camino'. Investigado penalmente por prevaricación por el TS por hechos relacionados con la filtración de su voto previo a la deliberación en el caso Dani Olmo.",
+    relatives: "Esposa, hijos y hermanos también son juristas (familia judicial de varias generaciones en Galicia).",
+    legalIssues: "Investigado por el Tribunal Supremo por presunta prevaricación (2024–2025), primera vez en la historia que un presidente del TC es investigado penalmente.",
+    tags: ["Judges for Democracy", "Attorney General under Zapatero", "Under Supreme Court investigation", "Appointed by PSOE majority"],
+    tagTypes: ["tag-assoc", "tag-minister", "tag-legal", "tag-appt"],
+    indScore: 8
+  },
+  {
+    inst: "Tribunal Constitucional – Vicepresidenta",
+    sector: "Constitutional Institutions",
+    person: "Inmaculada Montalbán",
+    role: "Vicepresidenta TC (2023–presente)",
+    decay: 3,
+    bio: "Magistrada granadina. Presidenta del Observatorio contra la Violencia Doméstica del CGPJ (2009–2013). Reconocida activista feminista dentro de la judicatura.",
+    partyLinks: "Reconoció militancia en el PSOE ante el Senado durante su comparecencia de idoneidad. Propuesta directamente por el bloque socialista para el TC. Premio Medalla de Andalucía otorgada por José Antonio Griñán (expresidente de la Junta, exministro socialista, condenado por los ERE a 6 años de cárcel, luego amnistiado). Griñán escribió textos elogiando su trayectoria.",
+    appointment: "Designada magistrada del TC por el Congreso (bloque PSOE–Sumar, dic. 2022). Posteriormente votó a favor de la Ley de Amnistía que perdonó a Griñán, quien la había recomendado y premiado.",
+    controversies: "Votó a favor de la amnistía que beneficiaba directamente a quien la había premiado y apoyado (Griñán). Sus posicionamientos en el TC coinciden sistemáticamente con los intereses del Gobierno de Sánchez. Su militancia socialista activa fue confirmada ante el Senado.",
+    relatives: "Sin familiares políticos conocidos. Su conexión relevante es Griñán, no un familiar.",
+    tags: ["PSOE member (self-acknowledged)", "Proposed by PSOE", "Awarded by Griñán (ERE case)", "Voted for Griñán amnesty"],
+    tagTypes: ["tag-party", "tag-appt", "tag-candidate", "tag-assoc"],
+    indScore: 7
+  },
+  {
+    inst: "Consejo de Estado",
+    sector: "Constitutional Institutions",
+    person: "Carmen Calvo",
+    role: "Presidenta (marzo 2024–presente)",
+    decay: 3,
+    bio: "Catedrática de Derecho Constitucional por la Universidad de Córdoba. Nacida en Cabra (Córdoba, 1957). Ha sido ministra con Zapatero y vicepresidenta con Sánchez.",
+    partyLinks: "Militante y dirigente del PSOE durante décadas. Secretaria del área de Igualdad de la Comisión Ejecutiva Federal del PSOE (2017–2021). Diputada del PSOE en cinco legislaturas. Vicepresidenta primera del Gobierno y ministra de Presidencia e Igualdad con Sánchez (2018–2021). Ministra de Cultura con Zapatero (2004–2007). Fue sancionada por el PSOE con 600 € por abstenerse en la ley trans.",
+    appointment: "Propuesta por el Gobierno de Sánchez en febrero de 2024 para sustituir a la exministra Magdalena Valerio, cuyo nombramiento había sido anulado por el Tribunal Supremo por no ser 'jurista de reconocido prestigio'. Avalada en la comisión del Congreso con 19 votos (bloque de investidura de Sánchez) contra 18. PP y Vox votaron en contra. Fue diputada en activo del PSOE hasta días antes de ser propuesta.",
+    controversies: "Es la segunda ex-ministra y militante socialista consecutiva nombrada por Sánchez para presidir el Consejo de Estado (tras Valerio). El patrón se repite: el primer nombramiento fue anulado por el Supremo; el segundo levantó las mismas dudas de idoneidad técnica pero superó el umbral formal. El Consejo de Estado debe emitir dictámenes sobre las propias leyes del Gobierno que la nombró.",
+    relatives: "Sin familiares políticos conocidos directamente relevantes para el cargo.",
+    legalIssues: "Su predecesora (Magdalena Valerio) fue anulada por el TS por no cumplir el requisito de 'jurista de reconocido prestigio'. Calvo superó la comparecencia pero el PP cuestionó el mismo requisito. El TS no impugnó su nombramiento.",
+    tags: ["Former Zapatero minister", "Former Sánchez deputy PM", "Active PSOE member", "Replaced annulled appointment"],
+    tagTypes: ["tag-minister", "tag-minister", "tag-party", "tag-legal"],
+    indScore: 6
+  },
+  {
+    inst: "Defensor del Pueblo",
+    sector: "Constitutional Institutions",
+    person: "Ángel Gabilondo",
+    role: "Defensor del Pueblo (2021–presente)",
+    decay: 2,
+    bio: "Filósofo y catedrático de Metafísica, nacido en San Sebastián (1949). Rector de la UAM (2002–2009). Hermano del icónico periodista Iñaki Gabilondo.",
+    partyLinks: "Ministro de Educación con Zapatero (2009–2011). Candidato del PSOE a la Presidencia de la Comunidad de Madrid en 2015, 2019 y 2021, cosechando resultados históricamente malos. Diputado y portavoz del Grupo Parlamentario Socialista en la Asamblea de Madrid (2015–2021). Renunció a su acta 6 meses antes de ser nombrado Defensor.",
+    appointment: "Pactado entre PSOE y PP con mayoría de 3/5, cumpliendo el requisito formal de consenso. Fue interpretado como una 'salida digna' para un político cuya carrera electoral había concluido con rotundo fracaso. El acuerdo bipartidista da cierta cobertura institucional, aunque el candidato era políticamente activo hasta meses antes.",
+    controversies: "Fue candidato activo del PSOE hasta 6 meses antes de jurar como Defensor del Pueblo. Su hermano Iñaki Gabilondo es uno de los periodistas más influyentes de España, históricamente próximo al PSOE. El cargo, a diferencia del resto de casos aquí recogidos, requirió consenso real del PP.",
+    relatives: "Hermano: Iñaki Gabilondo, periodista de referencia en España, históricamente próximo al PSOE y a los gobiernos socialistas.",
+    tags: ["Former Zapatero minister", "PSOE Madrid candidate x3", "Socialist MP", "Brother: Iñaki Gabilondo"],
+    tagTypes: ["tag-minister", "tag-candidate", "tag-candidate", "tag-relative"],
+    indScore: 30
+  },
+  {
+    inst: "Tribunal de Cuentas",
+    sector: "Constitutional Institutions",
+    person: "Enriqueta Chicano Jávega",
+    role: "Presidenta (2021–presente)",
+    decay: 1,
+    bio: "Consejera de carrera del Tribunal de Cuentas. Jurista especializada en fiscalización pública. Carrera técnica construida íntegramente dentro del propio Tribunal.",
+    partyLinks: "Adscrita al sector progresista del Tribunal. Elegida con apoyo del bloque de consejeros designados por el PSOE. No es militante conocida de ningún partido. Sin carrera política previa.",
+    appointment: "Elegida por el Pleno del Tribunal de Cuentas en el marco del gran pacto institucional PP-PSOE de 2021. El Tribunal fue renovado entonces con nombres de ambos bloques. La composición resultante tiene un perfil técnico pero con designaciones políticas subyacentes.",
+    controversies: "La Ley de Amnistía (2024) anuló las reclamaciones millonarias del Tribunal contra los dirigentes del procés independentista, vaciando de efecto una parte importante de la labor fiscalizadora desarrollada bajo su presidencia. Esto no es atribuible a ella personalmente, pero es un dato institucional relevante sobre la efectividad real del Tribunal.",
+    relatives: "No known family political ties.",
+    tags: ["Progressive TC sector", "PP–PSOE agreement", "Amnesty voided procés cases"],
+    tagTypes: ["tag-assoc", "tag-appt", "tag-assoc"],
+    indScore: 58
+  },
+
+  /* ── JUDICIARY ── */
+  {
+    inst: "CGPJ / Tribunal Supremo",
+    sector: "Judiciary",
+    person: "Isabel Perelló",
+    role: "Presidenta (sep. 2024–presente)",
+    decay: 1,
+    bio: "Magistrada nacida en Sabadell (1958). Carrera judicial desde 1985, sin interrupción. Magistrada de la Sala de lo Contencioso-Administrativo del TS desde 2009. Primera mujer presidenta del Tribunal Supremo y del CGPJ en la historia de España.",
+    partyLinks: "Afiliada a la asociación judicial progresista 'Juezas y Jueces para la Democracia'. Catalogada como magistrada del 'bloque progresista' por la prensa especializada. No ha militado en ningún partido político ni ha ejercido cargos políticos. El Gobierno celebró explícitamente su nombramiento (Pilar Alegría: 'una mujer progresista, catalana, con trayectoria intachable').",
+    appointment: "Elegida con 16 de 20 votos del CGPJ, incluyendo apoyo de vocales conservadores, lo que le da legitimidad de consenso real. Propuesta inicial del sector progresista pero aceptada ampliamente. Fue incluida en 2023 en la lista de candidatos del bloque progresista para el TC, lo que no prosperó.",
+    controversies: "Firmó en 2014 una carta conjunta con Margarita Robles (luego ministra de Defensa) sobre lenguaje sexista en sentencias. Cercana profesionalmente a Robles. Fue ponente del auto que rechazó la petición del PSOE de revisar votos nulos del 23-J (lo que demuestra independencia frente al Gobierno en ese asunto concreto).",
+    relatives: "Conexión profesional con Margarita Robles (ministra de Defensa con Sánchez), no familiar.",
+    tags: ["Judges for Democracy (women's)", "Real consensus (16/20)", "Rejected PSOE 23-J request", "Progressive"],
+    tagTypes: ["tag-assoc", "tag-clean", "tag-clean", "tag-assoc"],
+    indScore: 60
+  },
+  {
+    inst: "Fiscalía General del Estado",
+    sector: "Judiciary",
+    person: "Teresa Peramato",
+    role: "Fiscal General (dic. 2025–presente)",
+    decay: 2,
+    bio: "Fiscal especialista en violencia de género. Fiscala de Sala coordinadora contra la Violencia sobre la Mujer. Trayectoria técnica dentro de la carrera fiscal.",
+    partyLinks: "No militante conocida del PSOE. Sin carrera política propia. Sin embargo, su nombramiento se enmarca en un patrón sistemático del Gobierno de Sánchez: tres Fiscales Generales consecutivos nombrados por el mismo ejecutivo sin consenso con la oposición (Dolores Delgado, exministra; Álvaro García Ortiz, exalto cargo socialista; ahora Peramato).",
+    appointment: "Nombrada por el Consejo de Ministros de Sánchez en diciembre de 2025, sin ningún proceso de validación parlamentaria. Sustituyó a Álvaro García Ortiz, que fue condenado penalmente por revelar datos reservados del novio de la presidenta de la Comunidad de Madrid, Isabel Díaz Ayuso. El patrón de nombrar Fiscales sin consenso con el PP lleva siendo cuestionado durante toda la legislatura.",
+    controversies: "Su antecesora directa Dolores Delgado fue exministra de Justicia. García Ortiz fue condenado por filtrar datos privados con fines políticos. Tres Fiscales Generales del mismo Gobierno es un hito en la historia reciente. El Tribunal Supremo anuló también el posterior nombramiento de García Ortiz como fiscal de Sala.",
+    relatives: "No known family political ties.",
+    legalIssues: "Tomó posesión en un contexto en que su predecesor había sido condenado penalmente y el anterior a éste (Delgado) tuvo su nombramiento posterior también anulado por el TS.",
+    tags: ["Appointed by Sánchez", "Without PP consensus", "Succeeds convicted prosecutor", "Systematic pattern"],
+    tagTypes: ["tag-appt", "tag-appt", "tag-legal", "tag-assoc"],
+    indScore: 38
+  },
+
+  /* ── ECONOMIC REGULATORS ── */
+  {
+    inst: "Banco de España",
+    sector: "Economic Regulators",
+    person: "José Luis Escrivá",
+    role: "Gobernador (sep. 2024–2030)",
+    decay: 3,
+    bio: "Economista albaceteño (1960). Extensa carrera técnica: Banco de España, Banco Central Europeo, BBVA, Banco de Pagos Internacionales. Fue presidente de AIReF (2014–2020) con notable independencia.",
+    partyLinks: "No afiliado formalmente al PSOE. Sin embargo, fue ministro de Sánchez durante cuatro años: Ministro de Inclusión, Seguridad Social y Migraciones (2020–2023) y Ministro de Transformación Digital (2023–2024). Nombrado gobernador directamente desde el Consejo de Ministros, rompiendo 45 años de tradición bipartidista en el nombramiento.",
+    appointment: "Primera vez en la democracia española que un ministro en activo pasa directamente a gobernar el Banco de España sin periodo de enfriamiento. Nombrado sin consenso alguno con el PP, que lo rechazó frontalmente. La convención de repartir gobernador y subgobernador entre los dos grandes partidos también fue rota. La propia institución supervisada por él había cuestionado sus reformas cuando era ministro.",
+    controversies: "Como ministro criticó duramente los análisis del Banco de España que cuestionaban sus reformas de pensiones. Ahora preside la institución que le criticaba. Su reforma de pensiones fue tachada de insostenible a largo plazo por múltiples organismos internacionales y por la propia AIReF. El PP acusó formalmente al Gobierno de 'colonizar el Banco de España'.",
+    relatives: "Primo de Carlos Belmonte, exalcalde de Albacete (PP). Su familia tiene presencia en el municipalismo local albaceteño.",
+    tags: ["Former Sánchez minister (x2)", "Minister → Governor direct", "Without PP consensus", "Broke 45-year convention"],
+    tagTypes: ["tag-minister", "tag-minister", "tag-appt", "tag-assoc"],
+    indScore: 11
+  },
+  {
+    inst: "AIReF – Autoridad Independiente de Responsabilidad Fiscal",
+    sector: "Economic Regulators",
+    person: "Inés Olóndriz",
+    role: "Presidenta (marzo 2026–2032)",
+    decay: 2,
+    bio: "Economista. Licenciada en Ciencias Económicas por la Universidad de Barcelona, Executive Master en Administraciones Públicas por ESADE, analista CFA. 35 años de experiencia en finanzas públicas. Fue directora de Financiación del Ayuntamiento de Barcelona (2002–2011) y analista en S&P Global Ratings.",
+    partyLinks: "No militante conocida de ningún partido. Sin carrera política propia. Fue Secretaria General de Financiación Autonómica y Local del Ministerio de Hacienda (2020–2026), por lo que pasó directamente de ser alto cargo del Ministerio cuyas cuentas supervisa la AIReF a presidir la propia AIReF.",
+    appointment: "Propuesta por la vicepresidenta María Jesús Montero (Ministra de Hacienda). Aprobada el 25 de marzo de 2026 en la Comisión de Hacienda del Congreso con 19 votos (PSOE, Sumar, PNV, Bildu, BNG) contra 17 (PP, Vox), con ausencia de Junts. Primera vez en la historia de la AIReF que la candidata del Gobierno no obtiene unanimidad. La presidenta saliente (Cristina Herrero) advirtió expresamente que su sucesora debería venir de dentro de la AIReF, no del Ministerio. El propio Ministerio impidió que Herrero compareciera para rendir cuentas (lo que irritó incluso a Sumar y Junts).",
+    controversies: "Conflicto de intereses estructural: pasó el día anterior de controlar a la AIReF a presidirla. El PP citó textualmente: 'saltar de un día para otro de ser controlado a ser controlador da poca sensación de independencia'. Junts se ausentó de la votación criticando el 'daño causado' por el Gobierno. ERC y Sumar votaron a favor pero criticaron el proceso. Olóndriz había diseñado como alta cargo de Hacienda propuestas sobre financiación autonómica que la AIReF deberá ahora evaluar.",
+    relatives: "No known family political ties.",
+    tags: ["Proposed by Montero (Treasury)", "Ministry → AIReF direct", "Without unanimity (1st time)", "PP and Vox opposed"],
+    tagTypes: ["tag-appt", "tag-minister", "tag-appt", "tag-appt"],
+    indScore: 33
+  },
+  {
+    inst: "CNMV – Comisión Nacional del Mercado de Valores",
+    sector: "Economic Regulators",
+    person: "Carlos San Basilio Pardo",
+    role: "Presidente (dic. 2024–presente)",
+    decay: 1,
+    bio: "Economista y funcionario. Ex-Secretario General del Tesoro y Financiación Internacional del Ministerio de Economía. Perfil técnico-administrativo.",
+    partyLinks: "No afiliado a ningún partido conocido. Sin embargo, fue alto cargo del Ministerio de Economía bajo el Gobierno de Sánchez antes de su nombramiento en la CNMV.",
+    appointment: "Nombrado por el Gobierno en diciembre de 2024. Sin el nivel de polémica de otros nombramientos pero con el mismo patrón de puerta giratoria entre Ministerio y regulador independiente.",
+    controversies: "Su predecesora Rodrigo fue nombrada también sin especial polémica. El perfil técnico de San Basilio es reconocido. Sin escándalos personales.",
+    relatives: "No known family political ties.",
+    tags: ["Former Economy senior official", "Appointed by Sánchez", "Technical profile"],
+    tagTypes: ["tag-minister", "tag-appt", "tag-clean"],
+    indScore: 55
+  },
+  {
+    inst: "CNMC – Comisión Nacional Mercados y Competencia",
+    sector: "Economic Regulators",
+    person: "Cani Fernández",
+    role: "Presidenta (2019–presente)",
+    decay: 1,
+    bio: "Abogada especialista en derecho de la competencia. Socia en el bufete Cuatrecasas. Reconocida experta técnica con experiencia también en la Comisión Europea.",
+    partyLinks: "Sin militancia política conocida. Círculos académicos y jurídicos. No ha ejercido cargos políticos previos.",
+    appointment: "Nombrada por el Gobierno de Sánchez en 2019. Sin el rechazo frontal que generó Escrivá. La CNMC requiere renovación del Consejo por bloques, con equilibrio entre nominaciones del Gobierno y la oposición.",
+    controversies: "Algunas resoluciones de la CNMC han sido criticadas por sectores empresariales. Sin escándalos personales ni políticos de relevancia. Ha mantenido criterios técnicos en resoluciones que en ocasiones han incomodado al propio Gobierno.",
+    relatives: "No known family political ties.",
+    tags: ["Appointed by Sánchez", "No known party membership", "Technical legal profile"],
+    tagTypes: ["tag-appt", "tag-clean", "tag-clean"],
+    indScore: 63
+  },
+
+  /* ── SECTORAL REGULATORS ── */
+  {
+    inst: "Agencia Española de Protección de Datos",
+    sector: "Sectoral Regulators",
+    person: "Lorenzo Cotino Hueso",
+    role: "Presidente en funciones (2025–presente)",
+    decay: 1,
+    bio: "Catedrático de Derecho Constitucional. Especialista en derechos fundamentales e inteligencia artificial. Experto reputado en la materia.",
+    partyLinks: "Vinculado académicamente a círculos cercanos al PP. Vinculado a la Fundación Divina Pastora y otras instituciones de sesgo conservador. No es militante conocido del PP.",
+    appointment: "La directora anterior, Mar España Martí, ejerció con mandato formalmente vencido desde 2019 hasta 2024 en una situación jurídicamente irregular. La renovación fue un proceso polémico y largo. Cotino fue propuesto y aprobado en un contexto de transición.",
+    controversies: "La situación previa de Mar España (ejerciendo con mandato caducado durante años) fue en sí misma una anomalía institucional. La AEPD tuvo también polémicas por la lentitud en perseguir prácticas de vigilancia digital de plataformas.",
+    relatives: "No known family political ties.",
+    tags: ["Conservative academic", "Replaced irregular mandate", "No known party membership"],
+    tagTypes: ["tag-assoc", "tag-legal", "tag-clean"],
+    indScore: 60
+  },
+  {
+    inst: "Consejo de Seguridad Nuclear",
+    sector: "Sectoral Regulators",
+    person: "Juan Carlos Lentijo",
+    role: "Presidente (2019–presente)",
+    decay: 1,
+    bio: "Funcionario especializado en seguridad nuclear. Larga trayectoria técnica en el CSN y en organismos internacionales de energía nuclear.",
+    partyLinks: "Sin afiliación política conocida. Carrera técnica. Adscrito a las Cortes Generales, no al Gobierno, lo que le proporciona mayor protección formal.",
+    appointment: "Nombrado en 2019. El CSN es el regulador independiente más genuinamente técnico de los aquí recogidos. Sus informes sobre el cierre de centrales nucleares han generado tensión con el Gobierno en algunas ocasiones.",
+    controversies: "El debate político sobre el cierre o extensión de la vida de las centrales nucleares ha puesto al CSN en el centro de debates públicos. Sus informes técnicos han sido en ocasiones más favorables al mantenimiento de centrales que la posición oficial del Gobierno.",
+    relatives: "No known family political ties.",
+    tags: ["Nuclear technical profile", "Government-independent", "Reporting to Parliament"],
+    tagTypes: ["tag-clean", "tag-clean", "tag-clean"],
+    indScore: 72
+  },
+
+  /* ── INTELLIGENCE & SECURITY ── */
+  {
+    inst: "CNI – Centro Nacional de Inteligencia",
+    sector: "Intelligence & Security",
+    person: "Esperanza Casteleiro",
+    role: "Directora (2022–presente)",
+    decay: 2,
+    bio: "Funcionaria del CNI. Ex-directora adjunta operativa. Carrera construida íntegramente dentro del servicio de inteligencia. Primera mujer al frente del CNI.",
+    partyLinks: "Sin afiliación política conocida. Carrera técnica dentro del CNI. El CNI depende del Ministerio de Defensa y la directora es nombrada por Real Decreto del Consejo de Ministros.",
+    appointment: "Nombrada por Pedro Sánchez en 2022, sustituyendo a Paz Esteban, cesada en el contexto del escándalo 'Catalangate' (espionaje con Pegasus a dirigentes independentistas y presuntamente al propio Sánchez y Feijóo). Sin ningún proceso de validación parlamentaria, sin separación de poderes en el nombramiento. La dependencia del CNI del Ejecutivo es estructural.",
+    controversies: "El escándalo Catalangate sacudió al CNI: se reveló que el sistema Pegasus fue usado para espiar a decenas de independentistas catalanes, al presidente de Esquerra, al entorno de Sánchez y supuestamente al líder del PP, Alberto Núñez Feijóo. El nombramiento de Casteleiro se produjo en el contexto de esa crisis. La opacidad del CNI hace imposible la evaluación independiente de su gestión.",
+    relatives: "No known family political ties.",
+    tags: ["Appointed by decree", "No parliamentary ratification", "Catalangate context", "Executive-dependent"],
+    tagTypes: ["tag-appt", "tag-appt", "tag-assoc", "tag-minister"],
+    indScore: 32
+  },
+
+  /* ── MEDIA & COMMUNICATIONS ── */
+  {
+    inst: "RTVE – Radio Televisión Española",
+    sector: "Media & Communications",
+    person: "José Pablo López",
+    role: "Presidente (2021–presente)",
+    decay: 2,
+    bio: "Periodista y director de televisión. Ex-director de Antena 3 Noticias. Experiencia en medios privados y públicos.",
+    partyLinks: "No afiliado conocido a ningún partido. Elegido con los votos del bloque parlamentario de Sánchez (PSOE, Unidas Podemos y socios de investidura). El PP se opuso al proceso.",
+    appointment: "Elegido mediante concurso de méritos en el Congreso, pero con un proceso que el PP consideró diseñado para favorecer candidatos afines al Gobierno. Los consejeros del Consejo de Administración de RTVE fueron renovados también con el mismo patrón de bloqueo-desbloqueo parlamentario.",
+    controversies: "La cobertura de RTVE bajo su mandato ha sido criticada reiteradamente por la oposición como sistemáticamente favorable al Gobierno. Han existido denuncias internas de periodistas de la cadena sobre presiones editoriales. El Consejo de Informativos de RTVE ha emitido resoluciones críticas sobre coberturas concretas.",
+    relatives: "No known family political ties.",
+    tags: ["Elected by Sánchez bloc", "PP voted against", "Editorial bias complaints"],
+    tagTypes: ["tag-appt", "tag-appt", "tag-assoc"],
+    indScore: 35
+  },
+
+  /* ── GOVERNMENT BODIES ── */
+  {
+    inst: "CIS – Centro de Investigaciones Sociológicas",
+    sector: "Government Bodies",
+    person: "José Félix Tezanos",
+    role: "Presidente (2018–presente)",
+    decay: 3,
+    bio: "Sociólogo cántabro, nacido en 1946. Catedrático de Sociología en la UNED. Prolífico autor académico con más de 30 libros publicados.",
+    partyLinks: "Militante del PSOE desde 1973. Secretario de Estudios y Programas de la Comisión Ejecutiva Federal del PSOE (2017–2018). Miembro del Comité Federal del PSOE (1994–1997). Presidente de la Fundación Pablo Iglesias, fundación ideológica vinculada al PSOE. Abandonó formalmente la Ejecutiva del PSOE días antes de jurar el cargo en el CIS.",
+    appointment: "Nombrado directamente por Pedro Sánchez por Real Decreto en 2018. Primer militante activo de un partido político al frente del CIS en cuarenta años de democracia. El CIS es nominalmente 'independiente' pero su presidente es elegido libremente por el Gobierno.",
+    controversies: "Sus encuestas sobreestiman sistemáticamente al PSOE y subestiman al PP y a Vox. En elecciones autonómicas de Galicia, Madrid, Extremadura, Aragón y Castilla y León, sus sondeos fallaron siempre en la misma dirección: beneficiando a la izquierda. Acusado formalmente de malversación de fondos públicos en relación con contratos. Es el caso más claro y documentado de captura institucional en el presente documento.",
+    relatives: "Su hijo Sergio Tezanos ha coescrito trabajos académicos con él.",
+    legalIssues: "Acusado de malversación de fondos públicos relacionada con la gestión de contratos del CIS. Causa pendiente (2025–2026).",
+    tags: ["PSOE member since 1973", "Active PSOE executive member", "Pablo Iglesias Foundation", "Accused of misuse of funds"],
+    tagTypes: ["tag-party", "tag-party", "tag-party", "tag-legal"],
+    indScore: 4
+  },
+
+  /* ── PUBLIC ENTERPRISES ── */
+  {
+    inst: "SEPI – Sociedad Estatal de Participaciones Industriales",
+    sector: "Public Enterprises",
+    person: "Belén Gualda Romero",
+    role: "Presidenta (2020–presente)",
+    decay: 2,
+    bio: "Economista y funcionaria de carrera. Secretaria de Estado de Presupuestos y Gastos (2018–2020) bajo la ministra María Jesús Montero. Larga trayectoria en el Ministerio de Hacienda.",
+    partyLinks: "Sin militancia política conocida. Sin embargo, pasó directamente del cargo de Secretaria de Estado con el Gobierno Sánchez a presidir la SEPI, el holding público que controla Navantia, Correos, Paradores, Hunosa y otras participadas estratégicas. Nombrada por Real Decreto sin validación parlamentaria.",
+    appointment: "Nombrada por el Consejo de Ministros de Sánchez en 2020, directamente desde un cargo de alto rango en el Ejecutivo. La SEPI gestiona participaciones en más de 15 empresas y tiene capacidad de intervención en sectores estratégicos mediante sus fondos. Su nombramiento no requiere ningún proceso de idoneidad externo ni ratificación parlamentaria.",
+    controversies: "La SEPI gestionó el Fondo de Apoyo a la Solvencia de Empresas Estratégicas durante la pandemia, distribuyendo más de 1.000 millones de euros con escasa supervisión externa. La concesión de ayudas a Ávoris, al grupo Plus Ultra y a otras empresas generó polémicas sobre los criterios de selección. La opacidad en la gestión del fondo fue criticada por el Tribunal de Cuentas.",
+    relatives: "No known family political ties.",
+    tags: ["Former Secretary of State", "Appointed by decree", "Opaque pandemic fund management"],
+    tagTypes: ["tag-minister", "tag-appt", "tag-assoc"],
+    indScore: 38
+  },
+  {
+    inst: "Correos – Sociedad Estatal Correos y Telégrafos",
+    sector: "Public Enterprises",
+    person: "Juan Manuel Serrano Quintero",
+    role: "Presidente (2020–presente)",
+    decay: 2,
+    bio: "Abogado del Estado. Ex-director general de la Seguridad Social. Perfil de alto funcionario con trayectoria ligada a gobiernos socialistas.",
+    partyLinks: "Sin militancia pública en el PSOE. Fue director general en el Gobierno de Zapatero. Su nombramiento forma parte del patrón de altos cargos del gobierno anterior que regresan a posiciones relevantes bajo Sánchez.",
+    appointment: "Nombrado por el Consejo de Ministros en 2020. Correos es 100% estatal y su presidente se designa libremente por el Ejecutivo sin ningún proceso de idoneidad independiente. La empresa tiene 50.000 empleados y distribuye comunicaciones oficiales, incluyendo el voto por correo.",
+    controversies: "El voto por correo alcanzó niveles históricos en las elecciones de 2019 y 2023, generando denuncias del PP sobre irregularidades en la distribución y custodia de sobres electorales. Correos también recibió contratos millonarios durante la pandemia para la distribución de material sanitario, con escasa transparencia en los procesos de adjudicación. La politización de la empresa pública es considerada estructural.",
+    relatives: "No known family political ties.",
+    tags: ["Former Zapatero senior official", "Appointed by decree", "Manages postal voting"],
+    tagTypes: ["tag-minister", "tag-appt", "tag-assoc"],
+    indScore: 40
+  },
+  {
+    inst: "Renfe Operadora",
+    sector: "Public Enterprises",
+    person: "Raül Blanco Díaz",
+    role: "Presidente (2021–presente)",
+    decay: 2,
+    bio: "Ingeniero industrial. Ex-Secretario General de Industria y Pyme bajo el Ministerio de Industria de Sánchez (2018–2021). Funcionario del cuerpo de ingenieros superiores del Estado.",
+    partyLinks: "Sin militancia pública conocida. Sin embargo, pasó directamente del cargo de Secretario General (alta dirección ministerial) a presidir Renfe. El nombramiento responde al patrón de puertas giratorias entre Ministerio y empresa pública sin período de enfriamiento ni validación independiente.",
+    appointment: "Nombrado por el Consejo de Ministros en 2021. Renfe es la operadora ferroviaria pública con más de 14.000 empleados y gestiona el servicio de alta velocidad, cercanías y mercancías. Su presidente se designa libremente por el Ejecutivo. Durante su mandato, Renfe ha acumulado retrasos históricos y sanciones por incumplimiento de contratos.",
+    controversies: "Bajo su mandato, Renfe ha sufrido una severa crisis operativa: retrasos sistemáticos en la alta velocidad, averías masivas en Cercanías de Madrid y Barcelona, y la adquisición de trenes de hidrógeno que resultaron no caber por los túneles. La CNMC sancionó a Renfe por prácticas anticompetitivas. El Congreso ha llamado a Blanco a comparecer en múltiples ocasiones.",
+    relatives: "No known family political ties.",
+    tags: ["Former Secretary-General of Industry", "Ministry → Renfe direct", "Operational crisis under tenure"],
+    tagTypes: ["tag-minister", "tag-appt", "tag-assoc"],
+    indScore: 35
+  },
+  {
+    inst: "ADIF – Administrador de Infraestructuras Ferroviarias",
+    sector: "Public Enterprises",
+    person: "María Luisa Domínguez López",
+    role: "Presidenta (2018–presente)",
+    decay: 2,
+    bio: "Ingeniera de Caminos. Amplia trayectoria técnica en infraestructuras. Directora general de Ferrocarriles (2010–2011) bajo el Gobierno Zapatero.",
+    partyLinks: "Sin militancia pública conocida. Sin embargo, ocupó un cargo de dirección general bajo el Gobierno Zapatero y fue rescatada por el Gobierno Sánchez para presidir ADIF. El patrón de lealtades técnico-políticas es consistente con otros nombramientos del sector.",
+    appointment: "Nombrada por el Consejo de Ministros de Sánchez en 2018. ADIF gestiona más de 15.000 km de red ferroviaria y presupuestos de inversión de miles de millones de euros anuales. Las concesiones de obra, el ritmo de inversión regional y las decisiones de trazado tienen un enorme impacto político-territorial.",
+    controversies: "La distribución geográfica de las inversiones ferroviarias ha sido sistemáticamente criticada por comunidades autónomas gobernadas por el PP. La gestión del accidente de Angrois (2013) sigue generando litigios. Bajo su mandato se han acumulado retrasos en obras comprometidas y sobrecoste en infraestructuras clave. El sindicato CCOO y UGT han tenido un acceso privilegiado a las decisiones internas.",
+    relatives: "No known family political ties.",
+    tags: ["Former Zapatero senior official", "Appointed by Sánchez", "Opaque territorial investments"],
+    tagTypes: ["tag-minister", "tag-appt", "tag-assoc"],
+    indScore: 42
+  },
+  {
+    inst: "Aena S.M.E.",
+    sector: "Public Enterprises",
+    person: "Maurici Lucena Betriu",
+    role: "Presidente (2018–presente)",
+    decay: 2,
+    bio: "Economista catalán. Fue Secretario de Estado de Infraestructuras, Transporte y Vivienda (2016) con el PSOE en funciones. Subdirector general en el Ministerio de Fomento con Zapatero. También fue asesor económico de CiU en la Generalitat de Cataluña.",
+    partyLinks: "Sin militancia PSOE conocida públicamente. Sin embargo, toda su carrera de alto cargo está construida bajo gobiernos socialistas o de centro-derecha catalán, y fue rescatado por Sánchez para liderar Aena. El Estado posee el 51% de Aena, empresa cotizada en el IBEX-35 que gestiona 46 aeropuertos españoles.",
+    appointment: "Nombrado por el Consejo de Ministros en 2018. Aena es una empresa cotizada pero con control estatal mayoritario; su presidente lo nombra libremente el Gobierno, con enorme impacto sobre tarifas, inversiones y la industria turística española. No requiere validación parlamentaria ni proceso de idoneidad independiente.",
+    controversies: "La política de tarifas aeroportuarias ha generado conflictos con aerolíneas low-cost (Ryanair). Las inversiones en nuevas terminales y ampliaciones (especialmente en el aeropuerto de Madrid-Barajas) han sido cuestionadas por criterios de rentabilidad. La distribución de rutas y fondos entre aeropuertos ha seguido criterios que favorecen territorios clave para el Gobierno de coalición.",
+    relatives: "No known family political ties.",
+    tags: ["Former PSOE Secretary of State", "State 51% / IBEX listed", "Appointed by decree"],
+    tagTypes: ["tag-minister", "tag-appt", "tag-assoc"],
+    indScore: 44
+  },
+  {
+    inst: "ICO – Instituto de Crédito Oficial",
+    sector: "Public Enterprises",
+    person: "José Carlos García de Quevedo",
+    role: "Presidente (2018–presente)",
+    decay: 2,
+    bio: "Economista y alto funcionario. Ex-Secretario de Estado de Comercio (2010–2011) con el Gobierno Zapatero. Trayectoria en organismos económicos internacionales y en el ICEX.",
+    partyLinks: "Sin militancia socialista pública. Toda su trayectoria de alto cargo la ha desarrollado bajo gobiernos del PSOE (Zapatero y Sánchez). El ICO es el banco público de desarrollo del Estado español, con más de 100.000 millones de euros en créditos avalados.",
+    appointment: "Nombrado por el Consejo de Ministros de Sánchez en 2018. El ICO gestionó las líneas de avales COVID (más de 140.000 millones en garantías) con un nivel de supervisión parlamentaria muy limitado. Sus decisiones sobre a qué sectores y empresas se canalizan los créditos tienen un impacto macroeconómico y político enorme.",
+    controversies: "La gestión de los avales COVID por el ICO fue auditada con retraso. Varias empresas con conexiones políticas accedieron a líneas de crédito preferentes. El PP cuestionó la opacidad en la distribución de los avales y los criterios para la condonación de deudas a empresas de sectores concretos.",
+    relatives: "No known family political ties.",
+    tags: ["Former Zapatero Secretary of State", "Opaque COVID guarantee management", "Appointed by decree"],
+    tagTypes: ["tag-minister", "tag-appt", "tag-assoc"],
+    indScore: 43
+  },
+  {
+    inst: "Navantia",
+    sector: "Public Enterprises",
+    person: "Ricardo Domínguez García-Baquero",
+    role: "Presidente (2018–presente)",
+    decay: 1,
+    bio: "Ingeniero naval de carrera. Trayectoria técnica en el sector de la construcción naval. Conocido en el sector por su perfil profesional más que político.",
+    partyLinks: "Sin vinculaciones políticas significativas conocidas. Navantia está participada al 100% por la SEPI y fabrica fragatas, buques de guerra y submarinos. Sus contratos dependen del Ministerio de Defensa y de exportaciones a países aliados.",
+    appointment: "Nombrado por la SEPI (controlada por el Gobierno) en 2018. La empresa tiene plantas en Ferrol, Cádiz y Cartagena, zonas con fuerte tradición sindical y peso electoral. Las decisiones de inversión y de nuevos contratos tienen un impacto político directo en esas circunscripciones.",
+    controversies: "Los plazos y costes de entrega de fragatas a Australia y a la Armada española han generado tensiones diplomáticas y presupuestarias. El contrato con Arabia Saudí para la venta de corbetas generó un intenso debate parlamentario. La empresa ha recibido subvenciones millonarias para mantener el empleo en astilleros estructuralmente deficitarios.",
+    relatives: "No known family political ties.",
+    tags: ["100% SEPI (State-owned)", "Plants in key constituencies", "Contracts under Defence Ministry"],
+    tagTypes: ["tag-appt", "tag-assoc", "tag-minister"],
+    indScore: 55
+  },
+
+  /* ── PUBLIC MEDIA (AGENCIES) ── */
+  {
+    inst: "Agencia EFE",
+    sector: "Media & Communications",
+    person: "Gabriela Cañas",
+    role: "Presidenta (2020–presente)",
+    decay: 3,
+    bio: "Periodista madrileña con larga trayectoria en El País. Corresponsal en Bruselas. Presidenta del Consejo de Informativos de TVE (2018–2020). Conocida columnista de opinión con posiciones claramente progresistas.",
+    partyLinks: "Sin militancia PSOE conocida. Sin embargo, publicó artículos y columnas de opinión claramente favorables al Gobierno de Sánchez y desfavorables al PP antes de su nombramiento. Presidía el Consejo de Informativos de RTVE (organismo crítico con el sesgo editorial de la cadena pública) cuando fue rescatada por el Gobierno para dirigir la agencia.",
+    appointment: "Nombrada por el Consejo de Ministros de Sánchez en 2020. EFE es la agencia de noticias más grande en español del mundo, con 3.000 periodistas en 180 países. El Estado es su accionista mayoritario. Su presidencia se nombra por Real Decreto sin ningún proceso de idoneidad ni ratificación parlamentaria. EFE es fuente primaria para decenas de medios de comunicación en España y América Latina, lo que otorga al Gobierno una palanca informativa de alcance global.",
+    controversies: "Bajo su mandato, EFE ha sido acusada por la oposición de sesgo sistemático en la cobertura de asuntos del Gobierno. El sindicato de redactores ha emitido comunicados de preocupación por la línea editorial. El Comité de Empresa de EFE solicitó formalmente en 2023 garantías de independencia informativa. La agencia cubrió los indultos a los líderes del procés con un tono notoriamente más favorable que otras agencias internacionales.",
+    relatives: "No known family political ties.",
+    tags: ["Known progressive journalist", "Appointed by decree", "EFE: global Spanish-language reach", "Works council flags bias"],
+    tagTypes: ["tag-assoc", "tag-appt", "tag-assoc", "tag-legal"],
+    indScore: 22
+  },
+
+  /* ── STATISTICS & EVALUATION ── */
+  {
+    inst: "INE – Instituto Nacional de Estadística",
+    sector: "Government Bodies",
+    person: "José Antonio Ontiveros Baeza",
+    role: "Presidente (2022–presente)",
+    decay: 1,
+    bio: "Estadístico y economista. Funcionario de carrera del INE con trayectoria técnica interna. Ex-Secretario General del INE.",
+    partyLinks: "Sin militancia política conocida. Perfil técnico-estadístico. El INE depende del Ministerio de Asuntos Económicos pero tiene estatus de organismo autónomo. Su presidente es nombrado por Real Decreto del Consejo de Ministros.",
+    appointment: "Nombrado por el Gobierno de Sánchez en 2022. El INE produce el IPC (inflación), el PIB, la EPA (paro), el Padrón Municipal y el Censo Electoral. La metodología estadística puede tener impacto político directo: cómo se mide la inflación, qué se incluye en el PIB o cómo se calcula la tasa de paro son decisiones con consecuencias políticas y económicas enormes.",
+    controversies: "En 2023 el INE revisó al alza la serie histórica del PIB, mejorando artificialmente los datos de deuda/PIB justo antes de las elecciones generales. El PP denunció la revisión como políticamente conveniente para el Gobierno. La metodología del IPC durante la crisis energética también fue cuestionada por varios economistas independientes. El INE carece de un mecanismo de supervisión parlamentaria efectiva sobre sus decisiones metodológicas.",
+    relatives: "No known family political ties.",
+    tags: ["Produces CPI and unemployment data", "GDP revision questioned 2023", "No parliamentary oversight"],
+    tagTypes: ["tag-assoc", "tag-assoc", "tag-appt"],
+    indScore: 52
+  },
+
+  /* ── EU FUNDS & INTERNAL CONTROL ── */
+  {
+    inst: "IGAE – Intervención General de la Administración del Estado",
+    sector: "Government Bodies",
+    person: "Borja Colón de Carvajal Fibla",
+    role: "Interventor General (2018–presente)",
+    decay: 1,
+    bio: "Interventor-auditor del Estado. Funcionario de carrera del Cuerpo Superior de Interventores y Auditores del Estado. Perfil técnico dentro del Ministerio de Hacienda.",
+    partyLinks: "Sin militancia política conocida. Sin embargo, la IGAE depende orgánicamente del Ministerio de Hacienda y su titular es nombrado por el Gobierno. Es el principal órgano de control interno del gasto público, incluyendo los fondos europeos Next Generation.",
+    appointment: "Nombrado por Real Decreto del Consejo de Ministros de Sánchez en 2018. La IGAE supervisa la legalidad del gasto de toda la Administración General del Estado. Tiene un papel crítico en la validación de los fondos Next Generation UE, cuya gestión transparente es condición para recibir los desembolsos europeos.",
+    controversies: "La IGAE ha sido criticada por la lentitud en la tramitación de reparos de gasto, lo que genera cuellos de botella en la ejecución de los fondos europeos. La tasa de ejecución de los fondos Next Generation en España es de las más bajas de la UE. Varios informes de fiscalización de la IGAE sobre organismos públicos han tardado años en publicarse, reduciendo su utilidad como mecanismo de control efectivo.",
+    relatives: "No known family political ties.",
+    tags: ["Controls Next Generation funds", "Dependent on Treasury", "Appointed by decree"],
+    tagTypes: ["tag-minister", "tag-appt", "tag-assoc"],
+    indScore: 56
+  },
+
+  /* ── CULTURE & EDUCATION ── */
+  {
+    inst: "Museo Nacional del Prado",
+    sector: "Culture & Education",
+    person: "Manuel Borja-Villel",
+    role: "Director (2008–2023) / Miguel Falomir Faus, Director (2023–presente)",
+    decay: 0,
+    bio: "Miguel Falomir Faus: historiador del arte valenciano, especialista en pintura del Renacimiento y del Siglo de Oro. Conservador jefe del Prado desde 2012. Carrera construida íntegramente dentro de la institución.",
+    partyLinks: "Sin vinculaciones políticas conocidas. Fue elegido director mediante un proceso competitivo interno y aprobado por el Real Patronato del Prado, que incluye representantes del Estado, la Corona y la sociedad civil. Perfil marcadamente técnico y académico.",
+    appointment: "Designado director en 2023 mediante un proceso de selección interno del Patronato del Prado. El Prado es una institución con un estatuto de autonomía reforzada y un Patronato presidido por el Ministro de Cultura, pero con amplia representación no gubernamental. El proceso fue valorado como ejemplar respecto a otros nombramientos culturales.",
+    controversies: "Su predecesor Manuel Borja-Villel (director del Museo Reina Sofía, 2008–2023) sí generó controversias por posicionamientos políticos explícitos y gestión de exposiciones con sesgo ideológico percibido. Falomir no arrastra esas controversias.",
+    relatives: "No known family political ties.",
+    tags: ["Technical-academic profile", "Competitive process", "Board with broad representation"],
+    tagTypes: ["tag-clean", "tag-clean", "tag-clean"],
+    indScore: 78
+  },
+  {
+    inst: "Museo Nacional Centro de Arte Reina Sofía",
+    sector: "Culture & Education",
+    person: "Eva Díaz Pérez",
+    role: "Directora (2024–presente)",
+    decay: 2,
+    bio: "Historiadora del arte y ensayista. Comisaria de exposiciones con trayectoria en el circuito artístico contemporáneo. Editora cultural con vínculos con el mundo intelectual progresista español.",
+    partyLinks: "Sin militancia PSOE conocida. Sin embargo, fue nombrada por el Gobierno de Sánchez en el contexto de la salida de Manuel Borja-Villel, a quien sustituyó una gestora interina (María de Corral) antes de su designación. El Reina Sofía tiene una larga tradición de directores con posicionamiento ideológico progresista explícito, lo que es considerado parte del perfil buscado por el Ejecutivo.",
+    appointment: "Nombrada por el Consejo de Ministros de Sánchez en 2024. El Reina Sofía depende del Ministerio de Cultura y su director es nombrado libremente por el Gobierno. El museo tiene uno de los presupuestos culturales más grandes de España y define la narrativa del arte contemporáneo nacional e internacional.",
+    controversies: "La salida de Borja-Villel fue rodeada de tensiones internas y acusaciones de gestión autoritaria. La elección de su sucesora fue cuestionada por sectores del mundo artístico que pedían un proceso más transparente. El Reina Sofía ha sido criticado por sus posicionamientos institucionales en debates políticos (como la defensa del independentismo catalán como movimiento artístico legítimo).",
+    relatives: "No known family political ties.",
+    tags: ["Appointed by Sánchez", "Museum with ideological tradition", "No competitive process"],
+    tagTypes: ["tag-appt", "tag-assoc", "tag-appt"],
+    indScore: 42
+  },
+  {
+    inst: "ANECA – Agencia Nacional de Evaluación de la Calidad y Acreditación",
+    sector: "Culture & Education",
+    person: "Mercedes Siles Molina",
+    role: "Presidenta (2021–presente)",
+    decay: 1,
+    bio: "Catedrática de Filología Árabe por la Universidad de Granada. Reconocida investigadora con trayectoria académica en humanidades. Miembro de la Real Academia de la Historia.",
+    partyLinks: "Sin militancia política conocida. La ANECA es el organismo que acredita a todos los profesores universitarios de España (titulares, catedráticos) y evalúa los programas de grado y posgrado. Su presidenta es nombrada por el Ministerio de Universidades.",
+    appointment: "Nombrada por el Ministerio de Universidades del Gobierno de Sánchez en 2021. La ANECA tiene una influencia enorme sobre la carrera académica de decenas de miles de profesores. Sus criterios de evaluación determinan quién asciende en la universidad pública española, lo que a largo plazo moldea el perfil ideológico del profesorado.",
+    controversies: "La reforma de los criterios de acreditación bajo su mandato fue criticada por varias asociaciones de profesores por introducir elementos subjetivos. El sistema de acreditación español ha sido cuestionado internacionalmente por su lentitud y opacidad. La ANECA no tiene mecanismos de supervisión externos efectivos sobre sus decisiones de acreditación individual.",
+    relatives: "No known family political ties.",
+    tags: ["Controls university accreditation", "Appointed by Universities Ministry", "Long-term structural impact"],
+    tagTypes: ["tag-appt", "tag-minister", "tag-assoc"],
+    indScore: 58
+  },
+
+  /* ── TECHNOLOGY & NEW REGULATORS ── */
+  {
+    inst: "AESIA – Agencia Española de Supervisión de la Inteligencia Artificial",
+    sector: "Sectoral Regulators",
+    person: "María González Mouriz",
+    role: "Directora (2024–presente)",
+    decay: 2,
+    bio: "Abogada especialista en privacidad y nuevas tecnologías. Procedente de la Secretaría de Estado de Digitalización e Inteligencia Artificial del Ministerio de Asuntos Económicos.",
+    partyLinks: "Sin militancia política conocida. Sin embargo, pasó directamente de ser alta cargo de la Secretaría de Estado de Digitalización (Ministerio bajo el ámbito de Sánchez) a dirigir la AESIA, repitiendo el patrón de puerta giratoria Ministerio → regulador independiente.",
+    appointment: "Nombrada por Real Decreto del Consejo de Ministros en 2024. La AESIA es el supervisor nacional del Reglamento Europeo de Inteligencia Artificial (AI Act), que entra en vigor progresivamente entre 2024 y 2026. Es uno de los reguladores con mayor proyección futura: supervisará sistemas de IA en sectores críticos como salud, justicia, empleo y educación. Su independencia efectiva es determinante para la calidad de esa supervisión.",
+    controversies: "España se adelantó al resto de la UE al crear la AESIA antes de que el AI Act entrara en vigor, lo que fue visto por algunos expertos como una maniobra para situar a funcionarios propios al frente del regulador antes de que los estándares europeos impusieran criterios más exigentes de independencia. La ubicación de la AESIA en A Coruña (frente a Madrid o Barcelona) fue cuestionada como decisión política para contentar a los socios gallegos del Gobierno.",
+    relatives: "No known family political ties.",
+    tags: ["Ministry → AI regulator direct", "Appointed by decree", "European AI Act supervisor", "Headquartered in A Coruña (political decision)"],
+    tagTypes: ["tag-minister", "tag-appt", "tag-assoc", "tag-assoc"],
+    indScore: 36
+  },
+  {
+    inst: "Red.es – Entidad Pública Empresarial Red.es",
+    sector: "Public Enterprises",
+    person: "Luis Liñán Martín",
+    role: "Director General (2020–presente)",
+    decay: 1,
+    bio: "Ingeniero de telecomunicaciones. Perfil técnico en el ámbito de la digitalización pública. Trayectoria en el Ministerio de Economía y la Secretaría de Estado de Digitalización.",
+    partyLinks: "Sin militancia conocida. Red.es depende de la Secretaría de Estado de Digitalización e IA del Ministerio de Asuntos Económicos. Gestiona los fondos europeos de digitalización, incluyendo los del Plan de Recuperación (Next Generation UE) destinados a conectividad e infraestructuras digitales.",
+    appointment: "Nombrado por el Gobierno de Sánchez en 2020. Red.es gestiona contratos y subvenciones por valor de miles de millones de euros en digitalización de administraciones, despliegue de fibra óptica rural y formación digital. Sus decisiones de adjudicación tienen impacto territorial y empresarial significativo.",
+    controversies: "Red.es fue señalada por el Tribunal de Cuentas por irregularidades en la gestión de subvenciones en programas de digitalización de pymes. La ejecución del plan de conectividad rural ha acumulado retrasos importantes. La opacidad en los contratos de digitalización de la Administración ha sido denunciada por asociaciones empresariales del sector tecnológico.",
+    relatives: "No known family political ties.",
+    tags: ["Manages digital Next Generation funds", "Dependent on Secretary of State", "Flagged by Court of Auditors"],
+    tagTypes: ["tag-minister", "tag-appt", "tag-legal"],
+    indScore: 50
+  },
+
+  /* ── JUDICIARY (ADDITIONAL) ── */
+  {
+    inst: "Fiscalía Anticorrupción",
+    sector: "Judiciary",
+    person: "Alejandro Luzón García",
+    role: "Fiscal Jefe Anticorrupción (2024–presente)",
+    decay: 1,
+    bio: "Fiscal de carrera con trayectoria dentro del Ministerio Fiscal. Especialista en delitos económicos y blanqueo de capitales. Sin perfil político público.",
+    partyLinks: "Sin militancia política conocida. Sin embargo, el Fiscal Jefe Anticorrupción es nombrado por el Fiscal General del Estado, quien a su vez es designado por el Gobierno. La cadena de dependencia convierte el cargo en sensible: el responsable de perseguir la corrupción lo elige, en última instancia, el poder ejecutivo.",
+    appointment: "Nombrado por el Fiscal General García Ortiz (a su vez nombrado por Sánchez) en 2024. La Fiscalía Anticorrupción investiga casos que afectan directamente a partidos políticos, empresas públicas y altos cargos. La selección de qué casos se priorizan y cuáles se archivan tiene un impacto político enorme aunque generalmente opaco.",
+    controversies: "Su predecesor Alejandro Luzón fue cuestionado por la lentitud en casos que afectaban a donaciones al PSOE y a la gestión de fondos europeos. La Fiscalía Anticorrupción ha sido acusada de selectividad en la persecución de delitos económicos, priorizando casos que afectan a partidos de la oposición sobre los que implican al partido en el Gobierno.",
+    relatives: "No known family political ties.",
+    tags: ["Appointed by Sánchez Attorney General", "Executive dependency chain", "Perceived selectivity in cases"],
+    tagTypes: ["tag-appt", "tag-minister", "tag-assoc"],
+    indScore: 45
+  },
+
+  /* ── ENERGY ── */
+  {
+    inst: "Red Eléctrica de España – RedEia",
+    sector: "Public Enterprises",
+    person: "Beatriz Corredor Sierra",
+    role: "Presidenta (2020–presente)",
+    decay: 3,
+    bio: "Abogada. Ministra de Vivienda con Zapatero (2008–2010). Diputada del PSOE en varias legislaturas. Fue consejera de Logroño y del Gobierno de La Rioja.",
+    partyLinks: "Militante y exdirigente del PSOE. Exministra con Zapatero. Candidata socialista a la Presidencia de La Rioja. Toda su carrera política está ligada al PSOE. Pasó de la política activa a presidir REE, el operador del sistema eléctrico nacional, que determina los precios del mercado mayorista y la estabilidad de la red.",
+    appointment: "Nombrada por el Consejo de Ministros de Sánchez en 2020. El Estado posee el 20% de REE (participada también por fondos internacionales), pero el Gobierno nombra a su presidenta directamente. REE determina el precio de la energía en España mediante la gestión del mercado mayorista eléctrico (MIBEL). Su presidenta influye directamente en el precio de la electricidad que pagan 47 millones de españoles.",
+    controversies: "Fue exministra socialista que presidió una empresa que regula el mercado eléctrico en España durante la mayor crisis de precios energéticos de la historia reciente (2021–2022). El Gobierno Sánchez intervenía políticamente el mercado eléctrico mientras su exministra presidía el operador. El PP señaló sistemáticamente el conflicto de intereses. REE aprobó bajo su mandato el plan de cierre de centrales nucleares, alineado con la política del Gobierno.",
+    relatives: "No known direct family political ties.",
+    tags: ["Former Zapatero minister", "PSOE regional candidate", "Manages national electricity market", "Nuclear closure aligned with Government"],
+    tagTypes: ["tag-minister", "tag-candidate", "tag-assoc", "tag-assoc"],
+    indScore: 12
+  },
+
+  /* ── PUBLIC ENTERPRISES (ADDITIONAL) ── */
+  {
+    inst: "Paradores de Turismo de España",
+    sector: "Public Enterprises",
+    person: "Raquel Sánchez Jiménez",
+    role: "Presidenta (2024–presente)",
+    decay: 3,
+    bio: "Abogada. Alcaldesa de Gavà (Barcelona, 2011–2021). Ministra de Transportes, Movilidad y Agenda Urbana con Sánchez (2021–2023). Diputada del PSOE.",
+    partyLinks: "Militante del PSOE. Alcaldesa, ministra y diputada. Una de las figuras del Gobierno Sánchez que pasó directamente del Consejo de Ministros a presidir una empresa pública tras dejar el cargo ministerial. Paradores es 100% propiedad de la SEPI y gestiona 98 establecimientos hoteleros en edificios patrimoniales del Estado.",
+    appointment: "Nombrada por el Consejo de Ministros a propuesta de la SEPI en 2024. Es el ejemplo más nítido del fenómeno conocido como 'colocación' de exministros en empresas públicas: sin período de enfriamiento, sin proceso competitivo, sin validación parlamentaria. La empresa depende del Ministerio de Industria y Turismo.",
+    controversies: "Su nombramiento fue criticado frontalmente por el PP y por asociaciones empresariales del sector turístico como un caso de nepotismo institucional. El período sin actividad política previo a tomar posesión fue mínimo. El precedente acumulado de exministros del Gobierno Sánchez colocados en presidencias de empresas públicas (Corredor en REE, Escrivá en Banco de España, etc.) ha sido denominado por la prensa como 'el reparto'.",
+    relatives: "No known family political ties.",
+    legalIssues: "Sin causas judiciales personales conocidas. El patrón de nombramiento sin período de enfriamiento podría vulnerar la Ley de Conflictos de Intereses, aunque el Gobierno nunca ha sido sancionado por ello.",
+    tags: ["Former Sánchez minister", "Minister → public enterprise direct", "No cooling-off period", "PSOE member"],
+    tagTypes: ["tag-minister", "tag-minister", "tag-appt", "tag-party"],
+    indScore: 8
+  },
+  {
+    inst: "Casa de la Moneda – FNMT-RCM",
+    sector: "Public Enterprises",
+    person: "Ángel Díaz Moro",
+    role: "Presidente (2019–presente)",
+    decay: 1,
+    bio: "Funcionario de carrera. Trayectoria técnica en el Ministerio de Hacienda. Sin perfil político público destacado. La FNMT fabrica los billetes de euro para el Banco Central Europeo, los DNI, pasaportes, sellos y certificados electrónicos del Estado.",
+    partyLinks: "Sin militancia conocida. La FNMT es una entidad de derecho público adscrita al Ministerio de Hacienda. Su presidente es nombrado por Real Decreto. La institución fabrica documentos de identidad y certificados digitales para toda la Administración española.",
+    appointment: "Nombrado por el Gobierno de Sánchez en 2019. La FNMT tiene un perfil técnico-industrial y un nivel de politización percibida menor que otras empresas públicas. Sin embargo, su dependencia directa del Ministerio de Hacienda la expone a presiones en períodos electorales (producción de documentación de voto, gestión de certificados digitales de la Administración).",
+    controversies: "Sin escándalos políticos significativos bajo su mandato. La FNMT recibió el contrato para la emisión del Certificado COVID europeo, gestionado sin licitación abierta. La opacidad en los contratos de identidad digital con la Administración ha sido señalada por asociaciones del sector tecnológico.",
+    relatives: "No known family political ties.",
+    tags: ["Reporting to Treasury", "Produces ID cards and passports", "Appointed by decree"],
+    tagTypes: ["tag-minister", "tag-assoc", "tag-appt"],
+    indScore: 60
+  },
+  {
+    inst: "Enresa – Empresa Nacional de Residuos Radiactivos",
+    sector: "Public Enterprises",
+    person: "Juan Andrés Fabra Portela",
+    role: "Presidente (2018–presente)",
+    decay: 2,
+    bio: "Economista. Ex-Secretario General de Energía del Ministerio de Industria bajo el Gobierno Zapatero (2010–2011). Consejero independiente en varias empresas energéticas. Perfil de alto funcionario de gobiernos socialistas reciclado en el sector público.",
+    partyLinks: "Sin militancia PSOE pública conocida. Sin embargo, ocupó un cargo clave de Secretario General de Energía bajo Zapatero y fue recuperado por Sánchez para gestionar Enresa, la empresa pública encargada del almacenamiento y gestión de todos los residuos nucleares de España. El cargo es altamente estratégico dado el debate político sobre el cierre de las centrales nucleares.",
+    appointment: "Nombrado por el Consejo de Ministros de Sánchez en 2018. Enresa gestiona el Almacén Centralizado Temporal (ATC) de residuos nucleares y es la pieza clave en el plan de cierre de las centrales nucleares aprobado por el Gobierno. Sus decisiones técnicas tienen consecuencias para el suministro eléctrico durante décadas. El nombramiento no requirió ninguna validación parlamentaria ni proceso de idoneidad independiente.",
+    controversies: "Enresa está en el centro del debate político más polarizado de la energía española: el cierre de las centrales nucleares. La empresa certifica los plazos técnicos de desmantelamiento, que el Gobierno utiliza como argumento para justificar el calendario de cierres. El PP y el sector nuclear han cuestionado la objetividad de los informes de Enresa bajo su mandato. La elección del emplazamiento del ATC (finalmente en Cuenca) fue un proceso políticamente accidentado que duró más de una década.",
+    relatives: "No known family political ties.",
+    tags: ["Former Zapatero Energy Secretary-General", "Manages nuclear closure", "Appointed by decree", "Nuclear waste site: political decision"],
+    tagTypes: ["tag-minister", "tag-assoc", "tag-appt", "tag-assoc"],
+    indScore: 35
+  },
+  {
+    inst: "Puertos del Estado",
+    sector: "Public Enterprises",
+    person: "Álvaro Rodríguez Dapena",
+    role: "Presidente (2018–presente)",
+    decay: 1,
+    bio: "Ingeniero de Caminos. Ex-Secretario General de Infraestructuras del Ministerio de Fomento bajo el Gobierno Zapatero (2008–2011). Perfil técnico-político en infraestructuras de transporte.",
+    partyLinks: "Sin militancia PSOE conocida públicamente. Sin embargo, ocupó un cargo de alta dirección en el Ministerio de Fomento con Zapatero y fue rescatado por el Gobierno Sánchez para presidir Puertos del Estado, el organismo público que coordina los 28 puertos de interés general de España (Algeciras, Valencia, Barcelona, Bilbao, etc.).",
+    appointment: "Nombrado por el Consejo de Ministros en 2018. Puertos del Estado regula las tarifas portuarias, las concesiones de terminales y la inversión en infraestructuras portuarias. Las concesiones de nuevas terminales y ampliaciones (como la polémica ampliación del puerto de Barcelona) tienen un enorme impacto económico y territorial.",
+    controversies: "La ampliación del puerto de Barcelona generó un conflicto abierto con la Generalitat de Cataluña y con grupos ecologistas, con el Gobierno oscilando entre apoyar y frenar el proyecto según las necesidades de los socios parlamentarios. Las concesiones de terminales de contenedores han sido cuestionadas por criterios de adjudicación poco transparentes. El canon que los puertos pagan al Estado fue modificado bajo su mandato generando beneficios desiguales entre puertos.",
+    relatives: "No known family political ties.",
+    tags: ["Former Zapatero Infrastructure Secretary-General", "Appointed by decree", "Opaque port concessions"],
+    tagTypes: ["tag-minister", "tag-appt", "tag-assoc"],
+    indScore: 50
+  },
+
+  /* ── CYBERSECURITY & RESEARCH ── */
+  {
+    inst: "INCIBE – Instituto Nacional de Ciberseguridad",
+    sector: "Sectoral Regulators",
+    person: "Félix Barrio Juárez",
+    role: "Director General (2022–presente)",
+    decay: 1,
+    bio: "Ingeniero de telecomunicaciones. Trayectoria técnica en ciberseguridad dentro de la Administración. Ex-subdirector del propio INCIBE. Perfil técnico sin carrera política visible.",
+    partyLinks: "Sin militancia política conocida. INCIBE depende de la Secretaría de Estado de Digitalización e Inteligencia Artificial, bajo el Ministerio de Asuntos Económicos. Su director es nombrado por Real Decreto del Consejo de Ministros. La institución protege las infraestructuras críticas digitales de España y coordina la respuesta a ciberataques.",
+    appointment: "Nombrado en 2022. INCIBE gestiona el CERT de Seguridad e Industria (CERTSI) y coordina la ciberseguridad de empresas y ciudadanos. Colabora con el CCN-CERT (dependiente del CNI) para la protección de las administraciones públicas. La ubicación de su sede central en León fue una decisión política para apoyar el desarrollo de esa provincia.",
+    controversies: "España ha sufrido varios ciberataques graves a infraestructuras públicas (SEPE, Ministerio de Sanidad, DGT) bajo su mandato. La coordinación entre INCIBE y el CNI ha sido cuestionada por duplicidades y falta de protocolo claro. La Estrategia Nacional de Ciberseguridad ha tardado años en actualizarse. INCIBE ha sido señalado por sindicatos del sector por problemas de retención de talento técnico frente al sector privado.",
+    relatives: "No known family political ties.",
+    tags: ["Technical profile", "Protects critical infrastructure", "Dependent on Digital Sec. of State"],
+    tagTypes: ["tag-clean", "tag-assoc", "tag-minister"],
+    indScore: 62
+  },
+  {
+    inst: "CSIC – Consejo Superior de Investigaciones Científicas",
+    sector: "Culture & Education",
+    person: "Eloísa del Pino Matute",
+    role: "Presidenta (2022–presente)",
+    decay: 1,
+    bio: "Politóloga y funcionaria del CSIC. Investigadora del Instituto de Políticas y Bienes Públicos del CSIC. Especialista en política comparada y administración pública. Carrera científica dentro del propio organismo.",
+    partyLinks: "Sin militancia política conocida. La presidencia del CSIC es nombrada por el Consejo de Ministros a propuesta del Ministerio de Ciencia. El CSIC es el mayor organismo público de investigación de España, con más de 13.000 empleados y 120 institutos. Sus decisiones sobre financiación, convocatorias y prioridades de investigación tienen un impacto estructural sobre la ciencia española.",
+    appointment: "Nombrada por el Gobierno de Sánchez en 2022. El proceso de selección del presidente del CSIC no incluye ninguna validación parlamentaria ni concurso competitivo externo. El organismo gestiona cientos de millones de euros en subvenciones de investigación y tiene convenios con empresas privadas que pueden generar conflictos de interés.",
+    controversies: "El CSIC fue señalado durante la pandemia por la instrumentalización política de sus investigadores como voceros del Gobierno en conferencias de prensa. La gestión de los fondos de investigación COVID fue auditada con observaciones. La brecha salarial entre investigadores del CSIC y sus homólogos europeos ha generado una fuga de talento crónica que ningún presidente ha logrado revertir. La politización de la agenda de investigación (énfasis en áreas afines a la coalición gobernante) ha sido denunciada por investigadores internos.",
+    relatives: "No known family political ties.",
+    tags: ["Appointed by Sánchez", "Largest research body in Spain", "No competitive selection"],
+    tagTypes: ["tag-appt", "tag-assoc", "tag-appt"],
+    indScore: 55
+  },
+
+  /* ── HERITAGE & CULTURE ── */
+  {
+    inst: "Biblioteca Nacional de España",
+    sector: "Culture & Education",
+    person: "Ana Santos Aramburu",
+    role: "Directora (2013–presente)",
+    decay: 0,
+    bio: "Bibliotecaria y archivista de carrera. Licenciada en Geografía e Historia y especialista en documentación. Trayectoria técnica íntegramente dentro del sistema bibliotecario y archivístico del Estado. Ha atravesado gobiernos del PP y del PSOE sin ser sustituida.",
+    partyLinks: "Sin vinculaciones políticas conocidas de ningún signo. Es un caso infrecuente: una directora de institución cultural pública que ha sobrevivido a cambios de gobierno de diferente color (PP 2013–2018, PSOE 2018–presente) sin ser relevada, lo que sugiere un perfil genuinamente técnico e independiente.",
+    appointment: "Nombrada por el Gobierno del PP en 2013 y mantenida por los gobiernos de Sánchez. La continuidad a través de cambios de signo político es, en el contexto del presente monitor, un indicador positivo de institucionalidad.",
+    controversies: "Sin escándalos políticos bajo su mandato. La BNE ha atravesado recortes presupuestarios y ha tenido dificultades para digitalizar su fondo histórico al ritmo de otras bibliotecas nacionales europeas. Sin polémicas de captura institucional.",
+    relatives: "No known family political ties.",
+    tags: ["Survived PP→PSOE change", "Technical archive profile", "No political scandals"],
+    tagTypes: ["tag-clean", "tag-clean", "tag-clean"],
+    indScore: 85
+  },
+
+  /* ── FINANCIAL SYSTEM ── */
+  {
+    inst: "FGD – Fondo de Garantía de Depósitos",
+    sector: "Economic Regulators",
+    person: "Presidencia rotativa entre Banco de España y banca privada",
+    role: "Comisión Gestora (estructura colegiada)",
+    decay: 1,
+    bio: "El FGD no tiene un presidente individual permanente: su Comisión Gestora está presidida por el subgobernador del Banco de España y compuesta por representantes de la banca privada y del propio Banco de España. Garantiza los depósitos bancarios hasta 100.000 € por titular.",
+    partyLinks: "La dependencia indirecta del Banco de España (cuyo gobernador es el exministro Escrivá, nombrado por Sánchez) introduce un nexo de influencia política indirecto. El FGD tiene activos superiores a 8.000 millones de euros y puede intervenir en entidades en crisis.",
+    appointment: "El FGD opera bajo la supervisión del Banco de España y del Ministerio de Economía. Su estructura colegiada limita la captura individual, pero la presidencia efectiva recae sobre el subgobernador del Banco de España, que también es nombrado por el Gobierno.",
+    controversies: "El FGD fue vaciado durante la crisis bancaria de 2012–2014 para rescatar entidades como Bankia, CAM y otras cajas. Su recapitalización ha sido lenta. El uso de sus fondos para rescates discrecionales (sin concurso abierto de soluciones) fue cuestionado por el Tribunal de Cuentas europeo. La representación de la banca privada en su Comisión Gestora genera conflictos de interés estructurales.",
+    relatives: "N/A – collegiate structure.",
+    tags: ["Dependent on Bank of Spain", "Deputy governor chairs (govt-appointed)", "Depleted in 2012–2014 crisis"],
+    tagTypes: ["tag-minister", "tag-appt", "tag-legal"],
+    indScore: 48
+  },
+  {
+    inst: "FROB – Fondo de Reestructuración Ordenada Bancaria",
+    sector: "Economic Regulators",
+    person: "Ángel Estrada García",
+    role: "Presidente (2021–presente)",
+    decay: 1,
+    bio: "Economista. Larga trayectoria técnica en el Banco de España, donde fue director del Departamento de Estabilidad Financiera. Perfil de alto funcionario del Banco de España con experiencia en resolución bancaria.",
+    partyLinks: "Sin militancia política conocida. El FROB es el organismo de resolución bancaria de España, creado en 2009 para gestionar la crisis financiera. Depende del Ministerio de Economía y del Banco de España conjuntamente. Su presidente es nombrado por el Consejo de Ministros.",
+    appointment: "Nombrado por el Gobierno de Sánchez en 2021. El FROB gestiona aún participaciones en entidades rescatadas (especialmente la participación residual del Estado en Bankia-CaixaBank) y coordina con el Mecanismo Único de Resolución europeo. Sus decisiones sobre cuándo y cómo desinvertir el Estado tienen impacto en el sector bancario.",
+    controversies: "La desinversión del Estado en CaixaBank (heredera de la fusión con Bankia) se ha producido en un contexto de críticas sobre el precio y el momento elegido. La fusión Bankia–CaixaBank fue promovida por el Gobierno Sánchez en 2020 en condiciones que el PP consideró beneficiosas para CaixaBank. El FROB gestionó la venta con escasa transparencia sobre el proceso.",
+    relatives: "No known family political ties.",
+    tags: ["Appointed by Sánchez", "Manages banking divestment", "Dependent on Economy Ministry and Bank of Spain"],
+    tagTypes: ["tag-appt", "tag-assoc", "tag-minister"],
+    indScore: 52
+  },
+
+  /* ── REGIONAL MEDIA ── */
+  {
+    inst: "CAC – Consell de l'Audiovisual de Catalunya",
+    sector: "Media & Communications",
+    person: "Núria Llorach Herrero",
+    role: "Presidenta (2020–presente)",
+    decay: 2,
+    bio: "Abogada especialista en comunicación y derecho audiovisual. Ex-directora general de la Corporació Catalana de Mitjans Audiovisuals (CCMA) interina. Trayectoria en el ecosistema mediático público catalán.",
+    partyLinks: "Sin militancia conocida en ningún partido. Sin embargo, fue propuesta en el marco del pacto entre ERC y el PSC en el Parlament de Catalunya, y su nombramiento refleja el equilibrio de fuerzas del independentismo moderado y la izquierda. El CAC regula todos los medios audiovisuales en Cataluña, incluida TV3 y Catalunya Ràdio.",
+    appointment: "Elegida por el Parlament de Cataluña en 2020 con los votos de ERC, PSC y Junts. El CAC es el regulador audiovisual catalán con capacidad de sancionar a cadenas y de influir en los criterios de pluralismo. Su presidenta es elegida parlamentariamente pero el proceso refleja los pactos de las mayorías parlamentarias catalanas.",
+    controversies: "El CAC ha sido criticado por la oposición en Cataluña (PP y Ciudadanos) por no actuar con suficiente rigor ante el sesgo pro-independentista de TV3 y Catalunya Ràdio. Las resoluciones del CAC sobre pluralismo han favorecido sistemáticamente a los medios públicos catalanes frente a las denuncias de la oposición. La regulación de plataformas digitales ha sido laxa comparada con otros reguladores europeos.",
+    relatives: "No known family political ties.",
+    tags: ["Elected by ERC-PSC-Junts pact", "Regulates TV3 and Catalunya Ràdio", "Inaction on pro-independence bias"],
+    tagTypes: ["tag-appt", "tag-assoc", "tag-assoc"],
+    indScore: 40
+  },
+
+  /* ── JUDICIARY (ADDITIONAL) ── */
+  {
+    inst: "Consejo Fiscal",
+    sector: "Judiciary",
+    person: "Óscar Moral Sancho",
+    role: "Presidente (2022–presente)",
+    decay: 1,
+    bio: "Fiscal de carrera. Trayectoria dentro del Ministerio Fiscal. El Consejo Fiscal es el órgano colegiado de gobierno de la carrera fiscal, paralelo al CGPJ para los jueces. Está compuesto por el Fiscal General y fiscales electos por sus compañeros.",
+    partyLinks: "Sin militancia política conocida. Sin embargo, el Consejo Fiscal está presidido de facto por el Fiscal General del Estado, que es nombrado por el Gobierno. La composición del Consejo Fiscal incluye tanto al Fiscal General (designado políticamente) como a fiscales elegidos por sus pares, lo que crea una tensión estructural entre independencia y dependencia ejecutiva.",
+    appointment: "El presidente del Consejo Fiscal es el propio Fiscal General (en este caso, el cargo en transición entre García Ortiz y Peramato). El Consejo Fiscal toma decisiones sobre ascensos, traslados y régimen disciplinario de los más de 2.500 fiscales españoles. Su composición mixta (electos + designado político) es una fuente de tensión permanente.",
+    controversies: "El Consejo Fiscal emitió un informe contrario a la Ley de Amnistía (2024), siendo ignorado por el Gobierno. Varios miembros del Consejo Fiscal electos han criticado públicamente las instrucciones del Fiscal General García Ortiz sobre cómo actuar en casos políticamente sensibles. La dependencia estructural del Fiscal General del Ejecutivo contamina la independencia del órgano colegiado.",
+    relatives: "No known family political ties.",
+    tags: ["Chaired by Attorney General (political)", "Report against Amnesty Law ignored", "Independence-executive tension"],
+    tagTypes: ["tag-minister", "tag-assoc", "tag-appt"],
+    indScore: 45
+  },
+
+  /* ── PUBLIC POLICY EVALUATION ── */
+  {
+    inst: "AEVAL / OPERA – Oficina de Evaluación y Prospectiva",
+    sector: "Government Bodies",
+    person: "Rafael Doménech Vilariño",
+    role: "Director (2022–presente)",
+    decay: 1,
+    bio: "Economista. Catedrático de Análisis Económico en la Universidad de Valencia. Ex-economista jefe de BBVA Research. Reconocido académico con publicaciones internacionales en macroeconomía.",
+    partyLinks: "Sin militancia política conocida. Perfil técnico-académico. OPERA (antes AEVAL) evalúa la efectividad de las políticas públicas del Gobierno y depende de la Presidencia del Gobierno. Sus informes pueden cuestionar o avalar iniciativas del propio Ejecutivo que la nombra.",
+    appointment: "Nombrado por el Gobierno de Sánchez en 2022 tras la transformación de AEVAL en OPERA. El organismo tiene el mandato de evaluar independientemente las políticas públicas, pero su director es nombrado por el Gobierno cuyas políticas evalúa. El conflicto de interés es estructural, aunque el perfil técnico de Doménech mitiga la percepción de captura.",
+    controversies: "OPERA ha publicado evaluaciones críticas con algunas políticas del Gobierno (especialmente en materia de vivienda y mercado laboral), lo que sugiere cierto margen de independencia real. Sin embargo, la selección de qué políticas se evalúan y cuándo se publican los informes puede estar condicionada por la agenda política del Ejecutivo. La financiación y plantilla del organismo han sido reducidas respecto a la AEVAL anterior.",
+    relatives: "No known family political ties.",
+    tags: ["Evaluates policies of the appointing govt", "Independent academic profile", "Dependent on Prime Minister's Office"],
+    tagTypes: ["tag-assoc", "tag-clean", "tag-minister"],
+    indScore: 58
+  }
+];
+/* =============================================================
+   END DATA
+   ============================================================= */
+
+const decayLabels = ["No evidence","Mild links","Significant","Clear capture"];
+const decayColors = ["#4cad7a","#c9a84c","#e08a3c","#e05252"];
+
+function meterColor(s){ return s>=70?'#4cad7a':s>=45?'#c9a84c':s>=25?'#e08a3c':'#e05252'; }
+
+let activeFilter = 'all', search = '';
+let openCards = {};
+
+function buildStats(){
+  const counts = [0,0,0,0];
+  DATA.forEach(p => counts[p.decay]++);
+  const labels = ["No evidence","Mild","Significant","Captured"];
+  const cls    = ["green","yellow","orange","red"];
+  document.getElementById('stats').innerHTML = counts.map((c,i)=>
+    `<div class="stat-pill ${cls[i]}"><span>${c}</span>${labels[i]}</div>`
+  ).join('');
+}
+
+function render(){
+  const q = search.toLowerCase();
+  const filtered = DATA.filter(p => {
+    const mf = activeFilter === 'all' || p.decay === parseInt(activeFilter);
+    const mq = !q || [p.inst, p.person, p.role, p.partyLinks, p.bio].some(s => s.toLowerCase().includes(q));
+    return mf && mq;
+  });
+
+  document.getElementById('count').textContent = `${filtered.length} profile${filtered.length!==1?'s':''} shown`;
+
+  if(!filtered.length){
+    document.getElementById('container').innerHTML = '<div class="no-results">No results found.</div>';
+    return;
+  }
+
+  const sectors = [...new Set(filtered.map(p=>p.sector))];
+  let html = '';
+  sectors.forEach(sec => {
+    const items = filtered.filter(p=>p.sector===sec);
+    html += `<div class="section-label">${sec}</div><div class="cards-grid">`;
+    items.forEach(p => {
+      const key = p.inst+'__'+p.person;
+      const isOpen = !!openCards[key];
+      const fill = meterColor(p.indScore);
+      html += `<div class="card decay-${p.decay}" id="card-${encodeURIComponent(key)}">
+        <div class="card-accent-bar"></div>
+        <div class="card-head">
+          <div class="card-head-row">
+            <div class="inst-name">${p.inst}</div>
+            <div class="decay-badge">${decayLabels[p.decay]}</div>
+          </div>
+          <div class="person-name">${p.person}</div>
+          <div class="person-role">${p.role}</div>
+          <div class="tags">${p.tags.map((t,j)=>`<span class="tag ${p.tagTypes[j]}">${t}</span>`).join('')}</div>
+        </div>
+        <div class="meter-wrap">
+          <div class="meter-label">
+            <span>Independence index</span>
+            <span class="meter-score" style="color:${fill}">${p.indScore}/100</span>
+          </div>
+          <div class="meter-track">
+            <div class="meter-fill" style="width:${p.indScore}%;background:${fill}"></div>
+          </div>
+        </div>
+        <div class="card-bio">${p.bio}</div>
+        ${p.legalIssues ? `<div style="margin:0 16px 8px;padding:6px 10px;background:rgba(201,64,64,0.1);border:1px solid rgba(201,64,64,0.3);border-radius:4px;font-size:11px;color:#e08080;font-family:var(--font-mono);">⚠ ${p.legalIssues}</div>` : ''}
+        <div class="toggle-btn${isOpen?' open':''}" onclick="toggle('${key.replace(/'/g,"\\'")}')">
+          <span class="toggle-arrow">▾</span> <span class="toggle-text">${isOpen?'Hide detail':'View full profile'}</span>
+        </div>
+        <div class="detail-panel${isOpen?' open':''}">
+          <div class="detail-row">
+            <div class="detail-key">Political links</div>
+            <div class="detail-val">${p.partyLinks}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Appointment</div>
+            <div class="detail-val">${p.appointment}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Controversies</div>
+            <div class="detail-val">${p.controversies}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Family / personal connections</div>
+            <div class="detail-val">${p.relatives}</div>
+          </div>
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+  });
+  document.getElementById('container').innerHTML = html;
+}
+
+function toggle(key){
+  openCards[key] = !openCards[key];
+  const card = document.getElementById('card-'+encodeURIComponent(key));
+  if(!card) return;
+  const btn = card.querySelector('.toggle-btn');
+  const panel = card.querySelector('.detail-panel');
+  const txt = card.querySelector('.toggle-text');
+  const arrow = card.querySelector('.toggle-arrow');
+  if(openCards[key]){
+    panel.classList.add('open');
+    btn.classList.add('open');
+    txt.textContent = 'Hide detail';
+  } else {
+    panel.classList.remove('open');
+    btn.classList.remove('open');
+    txt.textContent = 'View full profile';
+  }
+}
+
+document.getElementById('search').addEventListener('input', function(){ search=this.value; render(); });
+document.querySelectorAll('.fbtn').forEach(b => {
+  b.addEventListener('click', function(){
+    document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+    activeFilter = this.dataset.f;
+    render();
+  });
+});
+
+buildStats();
+render();
+</script>
+</body>
+</html>
