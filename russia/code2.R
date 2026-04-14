@@ -284,101 +284,61 @@ gdp_2024_comparison
 
 
 
+ 
 
 
+
+#Counterfactual
+library(dplyr)
+library(ggplot2)
 
 # --------------------------------------------------
-# Recalculate counterfactuals with fixed data
+# 1. Prepare annual growth rates
 # --------------------------------------------------
-
-# Update years vector to exclude 2025
 years <- 2000:2024
+n_years <- max(years) - min(years)
 
-# Russia's actual GDP per capita in 2000
-russia_2000 <- gdp_clean %>%
-  filter(country == "Russian Federation", year == 2000) %>%
-  pull(gdp_per_cap)
-
-# Compute counterfactual GDP per capita in 2024
-years_to_2024 <- 2024 - 2000
-
-gdp_2024_counterfactual <- tibble(
-  scenario = c("Average (excl. Caucasus)", "Best 5 (excl. Russia)", "Worst 3 (excl. Russia)"),
-  annual_growth = c(avg_growth_excl_caucasus, mean(best5$annual_growth), mean(worst3$annual_growth))
-) %>%
+gdp_growth <- gdp_clean %>%
+  filter(year %in% years) %>%
+  group_by(country) %>%
+  summarise(
+    start_gdp = gdp_per_cap[year == min(years)],
+    end_gdp   = gdp_per_cap[year == max(years)],
+    .groups = "drop"
+  ) %>%
   mutate(
-    gdp_2024 = russia_2000 * (1 + annual_growth)^years_to_2024
+    annual_growth = (end_gdp / start_gdp)^(1/n_years) - 1
   )
-
-print(gdp_2024_counterfactual)
-
-# Russia's actual GDP in 2024
-russia_2024_actual <- gdp_clean %>%
-  filter(country == "Russian Federation", year == 2024) %>%
-  pull(gdp_per_cap)
-
-# Add actual GDP and % difference to counterfactuals
-gdp_2024_comparison <- gdp_2024_counterfactual %>%
-  mutate(
-    actual_gdp = russia_2024_actual,
-    pct_diff = (gdp_2024 - actual_gdp) / actual_gdp * 100
-  )
-
-print(gdp_2024_comparison)
 
 # --------------------------------------------------
-# Plot with counterfactual cone
+# 2. Average growth excluding Caucasus
 # --------------------------------------------------
-
-# Russia actual index
-russia_index <- gdp_clean %>%
-  filter(country == "Russian Federation", year %in% years) %>%
-  arrange(year) %>%
-  mutate(index = gdp_per_cap / gdp_per_cap[year == 2000] * 100)
-
-# Cone boundaries
-best_growth <- max(best5$annual_growth)
-worst_growth <- min(worst3$annual_growth)
-
-cone_df <- data.frame(year = years) %>%
-  mutate(
-    upper = 100 * ((1 + best_growth) ^ (year - 2000)),
-    lower = 100 * ((1 + worst_growth) ^ (year - 2000)),
-    avg   = 100 * ((1 + avg_growth_excl_caucasus) ^ (year - 2000))
-  )
-
-# Plot
-ggplot() +
-  geom_ribbon(data = cone_df, aes(x = year, ymin = lower, ymax = upper),
-              fill = "grey70", alpha = 0.4) +
-  geom_hline(yintercept = 100, linetype = "dashed", color = "grey60") +
-  geom_line(data = cone_df, aes(x = year, y = avg, color = "Average (excl. Caucasus)"),
-            linewidth = 1.2, linetype = "dashed") +
-  geom_line(data = russia_index, aes(x = year, y = index, color = "Russia"),
-            linewidth = 1.2) +
-  labs(
-    title = "Counterfactual GDP per Capita Index (2000 = 100)",
-    subtitle = "Russia vs former USSR peers (shaded cone = worst to best performers)",
-    x = "Year",
-    y = "Index",
-    color = "Series"
-  ) +
-  scale_color_manual(values = c("Russia" = "black", "Average (excl. Caucasus)" = "purple")) +
-  theme_minimal(base_size = 12) +
-  theme(
-    panel.background = element_rect(fill = "#EAF2F8", color = NA),
-    plot.background  = element_rect(fill = "#EAF2F8", color = NA),
-    panel.grid.major = element_line(color = "white", linewidth = 0.4),
-    panel.grid.minor = element_blank(),
-    legend.position = "right"
-  )
-
-
-
-
+avg_growth_excl_caucasus <- gdp_growth %>%
+  filter(!country %in% c("Armenia","Azerbaijan","Georgia")) %>%
+  summarise(avg_growth = mean(annual_growth, na.rm = TRUE)) %>%
+  pull(avg_growth)
 
 # --------------------------------------------------
-# Plot with counterfactual cone + best/worst lines
+# 3. Best 5 countries (excluding Russia) and worst 3
+# --------------------------------------------------
+best5 <- gdp_growth %>%
+  filter(country != "Russian Federation") %>%
+  arrange(desc(annual_growth)) %>%
+  slice(1:5)  # Fixed: now actually getting 5
+
+worst3 <- gdp_growth %>%
+  filter(country != "Russian Federation") %>%
+  arrange(annual_growth) %>%
+  slice(1:3)
+
+# Print to verify
+print("Best 5 performers:")
+print(best5)
+print("Worst 3 performers:")
+print(worst3)
+
+# --------------------------------------------------
+# 4. Construct cone boundaries
 # --------------------------------------------------
 
 # Russia actual index
@@ -387,10 +347,11 @@ russia_index <- gdp_clean %>%
   arrange(year) %>%
   mutate(index = gdp_per_cap / gdp_per_cap[year == 2000] * 100)
 
-# Cone boundaries
+# Use max of best and min of worst for cone boundaries
 best_growth <- max(best5$annual_growth)
 worst_growth <- min(worst3$annual_growth)
 
+# Create cone dataframe
 cone_df <- data.frame(year = years) %>%
   mutate(
     upper = 100 * ((1 + best_growth) ^ (year - 2000)),
@@ -398,17 +359,19 @@ cone_df <- data.frame(year = years) %>%
     avg   = 100 * ((1 + avg_growth_excl_caucasus) ^ (year - 2000))
   )
 
-# Plot
+# --------------------------------------------------
+# 5. Plot with cone
+# --------------------------------------------------
 ggplot() +
   # Shaded cone
   geom_ribbon(data = cone_df, aes(x = year, ymin = lower, ymax = upper),
               fill = "grey70", alpha = 0.4) +
   geom_hline(yintercept = 100, linetype = "dashed", color = "grey60") +
   # Best case line
-  geom_line(data = cone_df, aes(x = year, y = upper, color = "Best 5 (excl. Russia)"),
+  geom_line(data = cone_df, aes(x = year, y = upper, color = "Best case"),
             linewidth = 1, linetype = "dashed") +
   # Worst case line
-  geom_line(data = cone_df, aes(x = year, y = lower, color = "Worst 3 (excl. Russia)"),
+  geom_line(data = cone_df, aes(x = year, y = lower, color = "Worst case"),
             linewidth = 1, linetype = "dotted") +
   # Average line
   geom_line(data = cone_df, aes(x = year, y = avg, color = "Average (excl. Caucasus)"),
@@ -426,8 +389,8 @@ ggplot() +
   scale_color_manual(values = c(
     "Russia" = "black",
     "Average (excl. Caucasus)" = "purple",
-    "Best 5 (excl. Russia)" = "darkgreen",
-    "Worst 3 (excl. Russia)" = "firebrick"
+    "Best case" = "darkgreen",
+    "Worst case" = "firebrick"
   )) +
   theme_minimal(base_size = 12) +
   theme(
