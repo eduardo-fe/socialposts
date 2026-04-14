@@ -167,120 +167,7 @@ plot_gdp_index(gdp_clean, ref_year = 2014,
 
 
 
-
-
-#Counterfactual
-library(dplyr)
-library(ggplot2)
-
-# --------------------------------------------------
-# 1. Prepare annual growth rates
-# --------------------------------------------------
-years <- sort(unique(gdp_clean$year))
-n_years <- max(years) - min(years)
-
-gdp_growth <- gdp_clean %>%
-  group_by(country) %>%
-  summarise(
-    start_gdp = gdp_per_cap[year == min(years)],
-    end_gdp   = gdp_per_cap[year == max(years)],
-    .groups = "drop"
-  ) %>%
-  mutate(
-    annual_growth = (end_gdp / start_gdp)^(1/n_years) - 1
-  )
-
-# --------------------------------------------------
-# 2. Average growth excluding Caucasus
-# --------------------------------------------------
-avg_growth_excl_caucasus <- gdp_growth %>%
-  filter(!country %in% c("Armenia","Azerbaijan","Georgia")) %>%
-  summarise(avg_growth = mean(annual_growth)) %>%
-  pull(avg_growth)
-
-# --------------------------------------------------
-# 3. Best 5 countries (excluding Russia) and worst 3
-# --------------------------------------------------
-best5 <- gdp_growth %>%
-  filter(country != "Russian Federation") %>%
-  arrange(desc(annual_growth)) %>%
-  slice(1:3)
-
-worst3 <- gdp_growth %>%
-  filter(country != "Russian Federation") %>%
-  arrange(annual_growth) %>%
-  slice(1:3)
-# --------------------------------------------------
-# 4. Construct counterfactual index series WITH CONES
-# --------------------------------------------------
-
-# Russia actual
-russia_index <- gdp_clean %>%
-  filter(country == "Russian Federation") %>%
-  arrange(year) %>%
-  mutate(index = gdp_per_cap / gdp_per_cap[year == min(years)] * 100,
-         series = "Russia")
-
-# Create cone boundaries using best and worst growth rates
-best_growth <- max(best5$annual_growth)
-worst_growth <- min(worst3$annual_growth)
-
-cone_df <- data.frame(year = years) %>%
-  mutate(
-    upper = 100 * ((1 + best_growth) ^ (year - min(years))),
-    lower = 100 * ((1 + worst_growth) ^ (year - min(years))),
-    avg   = 100 * ((1 + avg_growth_excl_caucasus) ^ (year - min(years)))
-  )
-
-# --------------------------------------------------
-# 5. Plot with cone (ribbon)
-# --------------------------------------------------
-ggplot() +
-  geom_ribbon(data = cone_df, aes(x = year, ymin = lower, ymax = upper),
-              fill = "grey80", alpha = 0.5) +
-  geom_hline(yintercept = 100, linetype = "dashed", color = "grey60") +
-  geom_line(data = cone_df, aes(x = year, y = avg, color = "Average (excl. Caucasus)"),
-            linewidth = 1.2, linetype = "dashed") +
-  geom_line(data = russia_index, aes(x = year, y = index, color = "Russia"),
-            linewidth = 1.2) +
-  labs(
-    title = "Counterfactual GDP per Capita Index (2000 = 100)",
-    subtitle = "Russia vs former USSR peers (shaded cone = best to worst performers)",
-    x = "Year",
-    y = "Index",
-    color = "Series"
-  ) +
-  scale_color_manual(values = c("Russia" = "black", "Average (excl. Caucasus)" = "purple")) +
-  theme_minimal(base_size = 12) +
-  theme(
-    panel.background = element_rect(fill = "#EAF2F8", color = NA),
-    plot.background  = element_rect(fill = "#EAF2F8", color = NA),
-    panel.grid.major = element_line(color = "white", linewidth = 0.4),
-    panel.grid.minor = element_blank(),
-    legend.position = "right"
-  )
-
-# --------------------------------------------------
-# 6. Compute counterfactual GDP for 2024 and % variation vs actual
-# --------------------------------------------------
-
-# Russia's actual GDP in 2024
-russia_2024_actual <- gdp_clean %>%
-  filter(country == "Russian Federation", year == 2024) %>%
-  pull(gdp_per_cap)
-
-# Add actual GDP and % difference to counterfactuals
-gdp_2024_comparison <- gdp_2024_counterfactual %>%
-  mutate(
-    actual_gdp = russia_2024_actual,
-    pct_diff = (gdp_2024 - actual_gdp) / actual_gdp * 100
-  )
-
-# Show results
-gdp_2024_comparison
-
-
-
+ 
 
 
 
@@ -329,7 +216,7 @@ best5 <- gdp_growth %>%
 worst3 <- gdp_growth %>%
   filter(country != "Russian Federation") %>%
   arrange(annual_growth) %>%
-  slice(1:3)
+  slice(1:5)
 
 # Print to verify
 print("Best 5 performers:")
@@ -399,4 +286,105 @@ ggplot() +
     panel.grid.major = element_line(color = "white", linewidth = 0.4),
     panel.grid.minor = element_blank(),
     legend.position = "right"
+  ) 
+
+
+
+
+# Get Russia actual value in final year
+russia_2024 <- russia_index %>%
+  filter(year == max(years)) %>%
+  pull(index)
+
+# Get counterfactual values in final year
+cf_2024 <- cone_df %>%
+  filter(year == max(years))
+
+avg_2024   <- cf_2024$avg
+upper_2024 <- cf_2024$upper
+lower_2024 <- cf_2024$lower
+
+
+loss_avg   <- avg_2024   - russia_2024
+loss_best  <- upper_2024 - russia_2024
+loss_worst <- lower_2024 - russia_2024  # (usually negative if Russia did better)
+
+
+loss_avg_pct  <- (avg_2024 / russia_2024 - 1) * 100
+loss_best_pct <- (upper_2024 / russia_2024 - 1) * 100
+
+cat("GDP per capita 'loss' in 2024 (index terms):\n")
+cat(sprintf("vs Average: %.1f index points (%.1f%%)\n", loss_avg, loss_avg_pct))
+cat(sprintf("vs Best case: %.1f index points (%.1f%%)\n", loss_best, loss_best_pct))
+
+
+# Russia GDP per capita in 2000 (baseline)
+russia_base <- gdp_clean %>%
+  filter(country == "Russian Federation", year == 2000) %>%
+  pull(gdp_per_cap)
+
+# Convert index gap to USD
+loss_avg_usd  <- (avg_2024 - russia_2024)/100 * russia_base
+loss_best_usd <- (upper_2024 - russia_2024)/100 * russia_base
+
+
+cat("GDP per capita 'loss' in 2024 (dollars):\n")
+cat(sprintf("vs Average: USD %.1f\n", loss_avg_usd))
+cat(sprintf("vs Best case: %.1f\n", loss_best_usd))
+
+
+
+
+
+
+
+
+loss_df <- russia_index %>%
+  select(year, russia = index) %>%
+  left_join(cone_df, by = "year")
+loss_df <- loss_df %>%
+  mutate(
+    gap_avg   = avg   - russia,
+    gap_best  = upper - russia,
+    gap_worst = lower - russia
   )
+
+loss_df <- loss_df %>%
+  arrange(year) %>%
+  mutate(
+    cum_loss_avg   = cumsum(gap_avg),
+    cum_loss_best  = cumsum(gap_best),
+    cum_loss_worst = cumsum(gap_worst)
+  )
+
+# Russia baseline GDP per capita (year 2000)
+russia_base <- gdp_clean %>%
+  filter(country == "Russian Federation", year == 2000) %>%
+  pull(gdp_per_cap)
+
+loss_df <- loss_df %>%
+  mutate(
+    gap_avg_usd  = gap_avg  / 100 * russia_base,
+    gap_best_usd = gap_best / 100 * russia_base,
+    
+    cum_loss_avg_usd  = cumsum(gap_avg_usd),
+    cum_loss_best_usd = cumsum(gap_best_usd)
+  )
+
+final_loss <- loss_df %>%
+  filter(year == max(year)) %>%
+  select(cum_loss_avg_usd, cum_loss_best_usd)
+
+print(final_loss)
+
+ggplot(loss_df, aes(x = year)) +
+  geom_line(aes(y = cum_loss_avg_usd, color = "vs Average"), linewidth = 1.3) +
+  geom_line(aes(y = cum_loss_best_usd, color = "vs Best case"), linewidth = 1.1, linetype = "dashed") +
+  labs(
+    title = "Cumulative GDP per Capita Shortfall",
+    subtitle = "Accumulated gap relative to counterfactual paths",
+    y = "Cumulative loss (USD per person)",
+    x = "Year",
+    color = "Comparison"
+  ) +
+  theme_minimal()
