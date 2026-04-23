@@ -1,0 +1,15 @@
+"Feature","RF_GF","RF_GA","GBM_GF","GBM_GA","NN_GF","NN_GA"
+"Team form (last 5)",23.66,12.25,26.23,19.99,NA,NA
+"Opponent form (last 5)",12.99,21.14,16.69,26.53,NA,NA
+"Team xG/game",4.94,1.52,12.16,14.67,NA,NA
+"Opponent xG/game",3.53,3.29,12.99,11.43,NA,NA
+"Opponent squad value",1.97,-0.89,13.58,12.93,NA,NA
+"Home advantage",1.06,0.78,4.14,3.15,NA,NA
+"Team squad value",-0.91,-0.5,14.23,11.29,NA,NA
+"home",NA,NA,NA,NA,0.1038,0.0998
+"of5",NA,NA,NA,NA,0.2439,0.1752
+"opp_xgf",NA,NA,NA,NA,0.1309,0.0522
+"ov_s",NA,NA,NA,NA,0.1424,0.2184
+"team_xgf",NA,NA,NA,NA,0.0734,0.0747
+"tf5",NA,NA,NA,NA,0.1525,0.118
+"tv_s",NA,NA,NA,NA,0.153,0.2617
