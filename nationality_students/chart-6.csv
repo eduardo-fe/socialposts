@@ -1,0 +1,222 @@
+﻿Title,Entrant students with a permanent address outside the UK by permanent address and academic year,""
+Location,UK,""
+Academic years,2006/07 to 2024/25,""
+Data source,HESA,""
+Data collection,"051,054,056",""
+Data source link,https://www.hesa.ac.uk/data-and-analysis/students/chart-6,""
+Data file canonical link,https://www.hesa.ac.uk/data-and-analysis/students/chart-6.csv,""
+Licence,Creative Commons Attribution 4.0 International Licence,""
+Code page,Unicode UTF-8,""
+Disclaimer,Please note that this data includes rounded totals. Caution must be taken when importing into a pivot table so as not to double count.,""
+Last updated,Jan-26,""
+,"",""
+Permanent address,Academic Year,Number
+China,2006/07,25135
+India,2006/07,14095
+Other Asia,2006/07,34405
+Total EU,2006/07,55410
+Nigeria,2006/07,5840
+Other Africa,2006/07,10400
+North America,2006/07,13990
+Middle East,2006/07,7575
+Other Europe,2006/07,6595
+South America,2006/07,2220
+Australasia,2006/07,1255
+China,2007/08,24670
+India,2007/08,16190
+Other Asia,2007/08,34260
+Total EU,2007/08,57690
+Nigeria,2007/08,6875
+Other Africa,2007/08,10255
+North America,2007/08,13260
+Middle East,2007/08,8290
+Other Europe,2007/08,6360
+South America,2007/08,2250
+Australasia,2007/08,1260
+China,2008/09,28905
+India,2008/09,23040
+Other Asia,2008/09,36915
+Total EU,2008/09,60160
+Nigeria,2008/09,8740
+Other Africa,2008/09,10450
+North America,2008/09,14065
+Middle East,2008/09,10700
+Other Europe,2008/09,7440
+South America,2008/09,2065
+Australasia,2008/09,1210
+China,2009/10,36950
+India,2009/10,23125
+Other Asia,2009/10,41095
+Total EU,2009/10,64390
+Nigeria,2009/10,10125
+Other Africa,2009/10,10185
+North America,2009/10,14435
+Middle East,2009/10,13305
+Other Europe,2009/10,8400
+South America,2009/10,2185
+Australasia,2009/10,1580
+China,2010/11,44805
+India,2010/11,23970
+Other Asia,2010/11,43525
+Total EU,2010/11,65470
+Nigeria,2010/11,10140
+Other Africa,2010/11,9350
+North America,2010/11,15000
+Middle East,2010/11,14220
+Other Europe,2010/11,9040
+South America,2010/11,2495
+Australasia,2010/11,1240
+China,2011/12,53525
+India,2011/12,16335
+Other Asia,2011/12,43275
+Total EU,2011/12,64765
+Nigeria,2011/12,10010
+Other Africa,2011/12,8145
+North America,2011/12,15500
+Middle East,2011/12,12925
+Other Europe,2011/12,9565
+South America,2011/12,2425
+Australasia,2011/12,1325
+China,2012/13,56535
+India,2012/13,12280
+Other Asia,2012/13,43130
+Total EU,2012/13,56195
+Nigeria,2012/13,9635
+Other Africa,2012/13,8180
+North America,2012/13,15310
+Middle East,2012/13,12500
+Other Europe,2012/13,9975
+South America,2012/13,2755
+Australasia,2012/13,1355
+China,2013/14,58810
+India,2013/14,11270
+Other Asia,2013/14,45605
+Total EU,2013/14,57200
+Nigeria,2013/14,10265
+Other Africa,2013/14,8760
+North America,2013/14,15635
+Middle East,2013/14,13860
+Other Europe,2013/14,10080
+South America,2013/14,3575
+Australasia,2013/14,1390
+China,2014/15,58975
+India,2014/15,10160
+Other Asia,2014/15,42490
+Total EU,2014/15,58905
+Nigeria,2014/15,9530
+Other Africa,2014/15,8485
+North America,2014/15,15980
+Middle East,2014/15,14390
+Other Europe,2014/15,10270
+South America,2014/15,3895
+Australasia,2014/15,1425
+China,2015/16,62290
+India,2015/16,9165
+Other Asia,2015/16,40790
+Total EU,2015/16,60220
+Nigeria,2015/16,7675
+Other Africa,2015/16,8765
+North America,2015/16,16610
+Middle East,2015/16,14065
+Other Europe,2015/16,9525
+South America,2015/16,3460
+Australasia,2015/16,1465
+China,2016/17,66705
+India,2016/17,9935
+Other Asia,2016/17,39590
+Total EU,2016/17,64410
+Nigeria,2016/17,5570
+Other Africa,2016/17,8705
+North America,2016/17,17170
+Middle East,2016/17,13660
+Other Europe,2016/17,9105
+South America,2016/17,3090
+Australasia,2016/17,1495
+China,2017/18,76930
+India,2017/18,13085
+Other Asia,2017/18,39055
+Total EU,2017/18,64120
+Nigeria,2017/18,4905
+Other Africa,2017/18,8580
+North America,2017/18,18205
+Middle East,2017/18,14285
+Other Europe,2017/18,9620
+South America,2017/18,3325
+Australasia,2017/18,1500
+China,2018/19,86965
+India,2018/19,18360
+Other Asia,2018/19,39825
+Total EU,2018/19,65380
+Nigeria,2018/19,5585
+Other Africa,2018/19,9255
+North America,2018/19,18690
+Middle East,2018/19,15220
+Other Europe,2018/19,9335
+South America,2018/19,3160
+Australasia,2018/19,1570
+China,2019/20,104295
+India,2019/20,40865
+Other Asia,2019/20,43235
+Total EU,2019/20,64155
+Nigeria,2019/20,7420
+Other Africa,2019/20,10075
+North America,2019/20,17940
+Middle East,2019/20,15455
+Other Europe,2019/20,9195
+South America,2019/20,3065
+Australasia,2019/20,1430
+China,2020/21,99165
+India,2020/21,50650
+Other Asia,2020/21,42105
+Total EU,2020/21,66685
+Nigeria,2020/21,13830
+Other Africa,2020/21,10515
+North America,2020/21,15145
+Middle East,2020/21,16265
+Other Europe,2020/21,8745
+South America,2020/21,2290
+Australasia,2020/21,1160
+China,2021/22,99970
+India,2021/22,85015
+Other Asia,2021/22,65535
+Total EU,2021/22,31390
+Nigeria,2021/22,32270
+Other Africa,2021/22,12195
+North America,2021/22,20005
+Middle East,2021/22,16885
+Other Europe,2021/22,9410
+South America,2021/22,2935
+Australasia,2021/22,1310
+China,2022/23,102795
+India,2022/23,126580
+Other Asia,2022/23,83475
+Total EU,2022/23,28905
+Nigeria,2022/23,53790
+Other Africa,2022/23,13745
+North America,2022/23,18205
+Middle East,2022/23,17520
+Other Europe,2022/23,9895
+South America,2022/23,2750
+Australasia,2022/23,1520
+China,2023/24,98415
+India,2023/24,107515
+Other Asia,2023/24,90865
+Total EU,2023/24,28385
+Nigeria,2023/24,34575
+Other Africa,2023/24,14905
+North America,2023/24,18985
+Middle East,2023/24,19320
+Other Europe,2023/24,10360
+South America,2023/24,2655
+Australasia,2023/24,1600
+China,2024/25,93585
+India,2024/25,94955
+Other Asia,2024/25,98600
+Total EU,2024/25,27210
+Nigeria,2024/25,23160
+Other Africa,2024/25,14440
+North America,2024/25,19790
+Middle East,2024/25,18105
+Other Europe,2024/25,10235
+South America,2024/25,2880
+Australasia,2024/25,1595
