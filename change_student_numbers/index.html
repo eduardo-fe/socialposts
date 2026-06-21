@@ -239,19 +239,19 @@
 
   <header class="masthead">
     <div class="eyebrow">HESA DT025 &amp; DT051 &middot; 2015/16 to 2024/25</div>
-    <h1>Where UK student enrolment grew &mdash; and where staff numbers didn't keep pace</h1>
+    <h1>Where UK student enrolment grew</h1>
     <p class="dek">
-      A provider-level comparison of change in total student enrolment against change in academic staff FTE,
-      for UK higher education providers with at least 2,000 students in 2015/16.
+      Change in total student enrolment by UK higher education provider, comparing 2015/16 and 2024/25,
+      for providers with at least 2,000 students in 2015/16.
     </p>
-    <div class="byline">137 providers &middot; HESA Table 6 (staff FTE) and Table 1 (enrolments)</div>
+    <div class="byline">137 providers &middot; HESA Table 1 (enrolments)</div>
   </header>
 
   <section class="lede">
     <h2>Summary</h2>
     <p>
-      This page presents the change in total student enrolment and the change in academic staff (FTE) for
-      137 UK higher education providers, comparing the 2015/16 and 2024/25 academic years.
+      This page presents the change in total student enrolment for 137 UK higher education providers,
+      comparing the 2015/16 and 2024/25 academic years.
     </p>
   </section>
 
@@ -293,10 +293,6 @@
             <th data-key="stu_24" data-type="number">Students 2024/25</th>
             <th data-key="stu_chg" data-type="number" class="sorted">Change</th>
             <th data-key="stu_pct_chg" data-type="number">% change</th>
-            <th data-key="fte_16" data-type="number">FTE 2015/16</th>
-            <th data-key="fte_24" data-type="number">FTE 2024/25</th>
-            <th data-key="fte_pct_chg" data-type="number">FTE % change</th>
-            <th data-key="growth_gap_ratio" data-type="number">Growth-gap ratio</th>
           </tr>
         </thead>
         <tbody id="resultsBody"></tbody>
@@ -379,10 +375,6 @@ function render() {
       <td>${fmtInt(r.stu_24)}</td>
       <td>${r.stu_chg > 0 ? "+" : ""}${fmtInt(r.stu_chg)}</td>
       <td>${fmtPct(r.stu_pct_chg)}</td>
-      <td>${fmtInt(r.fte_16)}</td>
-      <td>${fmtInt(r.fte_24)}</td>
-      <td>${fmtPct(r.fte_pct_chg)}</td>
-      <td>${fmtRatio(r.growth_gap_ratio)}</td>
     </tr>`;
   }).join("");
 }
